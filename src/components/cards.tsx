@@ -45,7 +45,7 @@ function SkillChips({ skills, t }: { skills: string[]; t: Dictionary }) {
 /** The category tab sitting in the card's top-right corner (as in the reference design). */
 function CornerTab({ children }: { children: React.ReactNode }) {
   return (
-    <span className="absolute right-0 top-0 rounded-bl-2xl rounded-tr-card bg-mist px-4 py-2 text-xs font-semibold text-ink-soft">
+    <span className="absolute right-0 top-0 rounded-bl-2xl rounded-tr-card bg-blush-50 px-4 py-2 text-xs font-semibold text-blush-700">
       {children}
     </span>
   );
