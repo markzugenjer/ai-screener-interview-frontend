@@ -53,7 +53,7 @@ const id: Dictionary = {
       { value: "Instan", label: "Feedback langsung" },
       { value: "24/7", label: "Bisa kapan saja" },
     ],
-    demoRole: "Junior Frontend Developer",
+    demoRole: "Wawancara screening",
     demoScore: "Komunikasi",
     demoReady: "Feedback siap",
     demoEncrypted: "Terenkripsi & privat",

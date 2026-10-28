@@ -9,10 +9,10 @@ import { cn } from "@/lib/format";
 
 // The interview itself is always in Bahasa Indonesia, so the sample lines stay Indonesian.
 const lines = [
-  { who: "ai", text: "Halo Budi! Apa perbedaan let, const, dan var di JavaScript?" },
-  { who: "you", text: "var itu function-scoped, sedangkan let dan const block-scoped." },
-  { who: "ai", text: "Baik. Kalau const berisi array, apakah kita masih bisa push?" },
-  { who: "you", text: "Bisa, karena yang dikunci referensinya, bukan isinya." },
+  { who: "ai", text: "Halo Budi! Boleh ceritakan sedikit tentang dirimu?" },
+  { who: "you", text: "Saya lulusan baru yang suka belajar hal baru dan bekerja dalam tim." },
+  { who: "ai", text: "Menarik! Pencapaian apa yang paling kamu banggakan?" },
+  { who: "you", text: "Memimpin proyek kampus bersama tim sampai selesai tepat waktu." },
 ] as const;
 
 const ease = [0.22, 1, 0.36, 1] as const;

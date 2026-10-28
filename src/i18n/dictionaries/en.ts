@@ -53,7 +53,7 @@ const en = {
       { value: "Instant", label: "Feedback after" },
       { value: "24/7", label: "Interview anytime" },
     ],
-    demoRole: "Junior Frontend Developer",
+    demoRole: "Screening interview",
     demoScore: "Communication",
     demoReady: "Feedback ready",
     demoEncrypted: "Encrypted & private",
