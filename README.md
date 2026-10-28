@@ -1,6 +1,6 @@
-# AI Screener Interview — Frontend
+# Dicy Talks — Frontend
 
-Next.js app for **Dicy**, the AI screening interviewer at **FDC Dental Clinic**: job board, candidate accounts, the live voice
+Next.js app for **Dicy Talks**, AI screening interviews by **FDC Dental Clinic** with Dicy as the interviewer: job board, candidate accounts, the live voice
 interview room, feedback pages, and the recruiter area.
 
 Backend: [ai-screener-interview-backend](https://github.com/markzugenjer/ai-screener-interview-backend)

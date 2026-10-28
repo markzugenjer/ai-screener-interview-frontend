@@ -7,7 +7,7 @@ import { AdminNav } from "./admin-nav";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getI18n();
-  return { title: { default: t.meta.recruiter, template: `%s · ${t.meta.recruiter} · FDC Dental Clinic` }, robots: { index: false } };
+  return { title: { default: t.meta.recruiter, template: `%s · ${t.meta.recruiter} · Dicy Talks` }, robots: { index: false } };
 }
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

@@ -4,7 +4,7 @@
 
 const en = {
   meta: {
-    title: "FDC Dental Clinic — AI screening interviews",
+    title: "Dicy Talks — AI screening interviews by FDC Dental Clinic",
     description:
       "Apply for a role and do your first interview by voice, in Bahasa Indonesia, whenever it suits you. Get feedback right after.",
     dashboard: "Dashboard",
@@ -36,12 +36,13 @@ const en = {
     recruiterArea: "Recruiter area",
     login: "Log in",
     createAccount: "Create account",
+    createAccountShort: "Sign up",
     logout: "Log out",
     main: "Main",
   },
   footer: {
     privacy: "Your WhatsApp number and resume are encrypted. Recruiters make every hiring decision.",
-    rights: "FDC Dental Clinic",
+    rights: "Dicy Talks by FDC Dental Clinic",
   },
   landing: {
     headline: "Your first interview, whenever you're ready.",

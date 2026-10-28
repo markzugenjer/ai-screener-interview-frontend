@@ -13,7 +13,7 @@ export async function SiteHeader({ user }: { user: User | null }) {
   const link = "rounded-full px-3 py-1.5 transition-colors hover:bg-mist hover:text-ink";
   return (
     <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:gap-6 sm:px-6">
         <Brand href={user ? "/dashboard" : "/"} />
         <nav aria-label={t.nav.main} className="hidden items-center gap-1 text-sm font-medium text-ink-soft sm:flex">
           <Link href={user ? "/dashboard#jobs" : "/#jobs"} className={link}>
@@ -39,11 +39,12 @@ export async function SiteHeader({ user }: { user: User | null }) {
             </>
           ) : (
             <>
-              <LinkButton href="/login" variant="ghost" size="sm" className="hidden sm:inline-flex">
+              <LinkButton href="/login" variant="ghost" size="sm">
                 {t.nav.login}
               </LinkButton>
-              <LinkButton href="/register" size="sm">
-                {t.nav.createAccount}
+              <LinkButton href="/register" size="sm" aria-label={t.nav.createAccount}>
+                <span className="sm:hidden">{t.nav.createAccountShort}</span>
+                <span className="hidden sm:inline">{t.nav.createAccount}</span>
               </LinkButton>
             </>
           )}

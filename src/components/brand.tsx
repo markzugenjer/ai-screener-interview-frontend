@@ -13,10 +13,10 @@ export function BrandMark({ className = "size-7" }: { className?: string }) {
 
 export function Brand({ href = "/" }: { href?: string }) {
   return (
-    <Link href={href} className="inline-flex items-center gap-2.5 rounded-lg font-bold tracking-tight text-ink">
+    <Link href={href} className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg font-bold tracking-tight text-ink sm:gap-2.5">
       <BrandMark />
       <span className="text-[1.0625rem]">
-        FDC<span className="hidden sm:inline"> Dental Clinic</span>
+        Dicy Talks
       </span>
     </Link>
   );

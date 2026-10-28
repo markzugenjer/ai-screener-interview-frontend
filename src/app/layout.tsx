@@ -19,7 +19,7 @@ const jakarta = localFont({
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getI18n();
   return {
-    title: { default: t.meta.title, template: "%s · FDC Dental Clinic" },
+    title: { default: t.meta.title, template: "%s · Dicy Talks" },
     description: t.meta.description,
     robots: { index: true, follow: true },
   };

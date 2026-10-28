@@ -52,11 +52,11 @@ export function LanguageSwitcher({ align = "right" }: { align?: "left" | "right"
         aria-expanded={open}
         aria-label={`${t.common.language}: ${localeNames[locale]}`}
         className={cn(
-          "inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-ink-soft transition-colors hover:bg-mist hover:text-ink",
+          "inline-flex h-9 items-center gap-1.5 rounded-full px-2 text-sm font-semibold sm:px-3 text-ink-soft transition-colors hover:bg-mist hover:text-ink",
           pending && "opacity-60",
         )}
       >
-        <Languages className="size-4" aria-hidden />
+        <Languages className="hidden size-4 min-[400px]:block" aria-hidden />
         {localeShort[locale]}
       </button>
       <AnimatePresence>

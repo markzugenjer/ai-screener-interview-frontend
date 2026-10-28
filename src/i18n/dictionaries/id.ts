@@ -4,7 +4,7 @@ import type { Dictionary } from "./en";
 
 const id: Dictionary = {
   meta: {
-    title: "FDC Dental Clinic — Wawancara screening dengan AI",
+    title: "Dicy Talks — Wawancara screening AI dari FDC Dental Clinic",
     description:
       "Lamar posisi dan ikuti wawancara pertamamu lewat suara, dalam Bahasa Indonesia, kapan pun kamu siap. Dapatkan feedback langsung setelahnya.",
     dashboard: "Dasbor",
@@ -36,12 +36,13 @@ const id: Dictionary = {
     recruiterArea: "Area rekruter",
     login: "Masuk",
     createAccount: "Buat akun",
+    createAccountShort: "Daftar",
     logout: "Keluar",
     main: "Utama",
   },
   footer: {
     privacy: "Nomor WhatsApp dan CV kamu dienkripsi. Semua keputusan rekrutmen dibuat oleh rekruter.",
-    rights: "FDC Dental Clinic",
+    rights: "Dicy Talks oleh FDC Dental Clinic",
   },
   landing: {
     headline: "Wawancara pertamamu, kapan pun kamu siap.",
