@@ -1,0 +1,41 @@
+import type { NextConfig } from "next";
+
+const apiUrl = (process.env.API_INTERNAL_URL ?? "http://localhost:8080").replace(/\/$/, "");
+
+// Headers for every response. The Content-Security-Policy is set per request
+// in src/proxy.ts because it carries a fresh nonce.
+const securityHeaders = [
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  // The microphone is needed for the interview; everything else is off.
+  { key: "Permissions-Policy", value: "microphone=(self), camera=(), geolocation=(), payment=(), usb=()" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+];
+
+const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  reactStrictMode: true,
+  // Pages are rendered per request (needed for CSP nonces and per-user data).
+  cacheComponents: false,
+  turbopack: {
+    rules: {
+      "*.css": {
+        loaders: ["@tailwindcss/turbopack"],
+        as: "*.css",
+      },
+    },
+  },
+  // The browser only ever talks to this origin. /api/v1/* is forwarded to the Go
+  // API, so session cookies stay first-party and no CORS is needed.
+  // /internal/* on the API is deliberately NOT forwarded.
+  async rewrites() {
+    return [{ source: "/api/v1/:path*", destination: `${apiUrl}/api/v1/:path*` }];
+  },
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
+  },
+};
+
+export default nextConfig;

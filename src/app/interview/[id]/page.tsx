@@ -1,0 +1,23 @@
+import type { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
+
+import { ApiError, apiServer, requireUser } from "@/lib/api-server";
+import type { Interview } from "@/lib/types";
+import { InterviewRoom } from "./room";
+
+export const metadata: Metadata = { title: "Interview", robots: { index: false } };
+
+export default async function InterviewPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const user = await requireUser(`/interview/${id}`);
+  let interview: Interview;
+  try {
+    interview = (await apiServer<{ interview: Interview }>(`/api/v1/interviews/${encodeURIComponent(id)}`)).interview;
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 404) notFound();
+    throw err;
+  }
+  if (interview.status !== "pending" && interview.status !== "in_progress") redirect(`/interview/${id}/feedback`);
+
+  return <InterviewRoom interview={interview} firstName={user.fullName.split(" ")[0] ?? "You"} />;
+}

@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens.
+ * Green = you and progress. Pink = the AI interviewer (its voice, its subtitles).
+ * Keep that mapping everywhere so the interface reads at a glance.
+ */
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #ffffff;
+  --color-mist: #f6faf7;
+  --color-ink: #1d2b23;
+  --color-ink-soft: #4f5e55;
+  --color-ink-faint: #7c8a82;
+  --color-line: #e3ece6;
+
+  --color-sage-50: #eef7f1;
+  --color-sage-100: #dcefe2;
+  --color-sage-200: #bfe0cb;
+  --color-sage-500: #3f8a5f;
+  --color-sage-600: #347552;
+  --color-sage-700: #2b6243;
+
+  --color-blush-50: #fdf1f3;
+  --color-blush-100: #fbe3e8;
+  --color-blush-200: #f6c9d2;
+  --color-blush-400: #e89aab;
+  --color-blush-600: #c4566f;
+  --color-blush-700: #a3405a;
+
+  --color-danger: #b4232c;
+  --color-danger-soft: #fdecec;
+  --color-amber: #9a6a00;
+  --color-amber-soft: #fdf4dc;
+
+  --radius-card: 1.25rem;
+  --radius-field: 0.75rem;
+
+  --shadow-lift: 0 1px 2px rgb(29 43 35 / 0.04), 0 8px 24px -12px rgb(29 43 35 / 0.12);
+
+  --animate-breathe: breathe 2.4s ease-in-out infinite;
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.55; }
+    50% { transform: scale(1.12); opacity: 0.9; }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-paper text-ink antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--color-sage-100);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-sage-500);
+    outline-offset: 2px;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
