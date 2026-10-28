@@ -4,10 +4,12 @@ import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { useI18n } from "@/i18n/client";
 import { api } from "@/lib/api-client";
 import { Button } from "./ui";
 
 export function LogoutButton() {
+  const { t } = useI18n();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   return (
@@ -23,7 +25,7 @@ export function LogoutButton() {
       }}
     >
       {!busy && <LogOut className="size-4" aria-hidden />}
-      Log out
+      <span className="hidden sm:inline">{t.nav.logout}</span>
     </Button>
   );
 }

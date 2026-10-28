@@ -40,11 +40,29 @@
   --shadow-lift: 0 1px 2px rgb(29 43 35 / 0.04), 0 8px 24px -12px rgb(29 43 35 / 0.12);
 
   --animate-breathe: breathe 2.4s ease-in-out infinite;
+  --animate-pop: pop 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade: fade 0.2s ease-out;
 
   @keyframes breathe {
     0%, 100% { transform: scale(1); opacity: 0.55; }
     50% { transform: scale(1.12); opacity: 0.9; }
   }
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(8px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+/* Dialogs pop in; their backdrop fades. */
+dialog[open] {
+  animation: var(--animate-pop);
+}
+dialog[open]::backdrop {
+  animation: var(--animate-fade);
 }
 
 @layer base {

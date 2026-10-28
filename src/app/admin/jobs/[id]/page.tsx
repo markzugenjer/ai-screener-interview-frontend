@@ -1,12 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PageTitle } from "@/components/admin-bits";
+import { getI18n } from "@/i18n/server";
 import { ApiError, apiServer, currentUser } from "@/lib/api-server";
 import type { Job, Question } from "@/lib/types";
 import { JobForm } from "../job-form";
 
-export const metadata = { title: "Edit job" };
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+  return { title: t.meta.editJob };
+}
 
 export default async function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -17,20 +22,20 @@ export default async function EditJobPage({ params }: { params: Promise<{ id: st
     if (err instanceof ApiError && err.status === 404) notFound();
     throw err;
   }
-  const user = await currentUser();
+  const [user, { t }] = await Promise.all([currentUser(), getI18n()]);
   return (
     <>
       <Link href="/admin/jobs" className="text-sm font-medium text-ink-soft hover:text-ink">
-        ← Jobs
+        {t.admin.backToJobs}
       </Link>
       <div className="mt-4">
         <PageTitle title={data.job.title}>
           {data.job.status === "open" ? (
             <Link href={`/jobs/${data.job.slug}`} className="text-sage-700 hover:underline">
-              View on the job board
+              {t.admin.viewOnBoard}
             </Link>
           ) : (
-            "Not visible to candidates."
+            t.admin.notVisible
           )}
         </PageTitle>
       </div>

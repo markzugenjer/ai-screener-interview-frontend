@@ -20,8 +20,8 @@ const sizes: Record<Size, string> = {
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", extra?: string) {
   return cn(
-    "inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-semibold transition-colors",
-    "disabled:cursor-not-allowed",
+    "inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-semibold",
+    "transition-[background-color,color,transform] duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:active:scale-100",
     variants[variant],
     sizes[size],
     extra,

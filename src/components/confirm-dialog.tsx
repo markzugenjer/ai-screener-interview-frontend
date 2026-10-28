@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { useI18n } from "@/i18n/client";
+import { errorMessage } from "@/lib/errors";
 import { Alert, Button } from "./ui";
 
 /** Accessible confirmation built on the native <dialog> element (focus trap and Esc for free). */
@@ -22,6 +24,7 @@ export function ConfirmDialog({
   onConfirm: () => Promise<void> | void;
   onClose: () => void;
 }) {
+  const { t } = useI18n();
   const ref = useRef<HTMLDialogElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -53,7 +56,7 @@ export function ConfirmDialog({
         )}
         <div className="mt-6 flex justify-end gap-2">
           <Button variant="ghost" onClick={onClose} disabled={busy}>
-            Cancel
+            {t.common.cancel}
           </Button>
           <Button
             variant={tone === "danger" ? "danger" : "primary"}
@@ -65,7 +68,7 @@ export function ConfirmDialog({
                 await onConfirm();
                 onClose();
               } catch (err) {
-                setError(err instanceof Error ? err.message : "Something went wrong.");
+                setError(errorMessage(err, t));
               } finally {
                 setBusy(false);
               }

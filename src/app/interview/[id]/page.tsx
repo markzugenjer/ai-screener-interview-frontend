@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
+import { getI18n } from "@/i18n/server";
 import { ApiError, apiServer, requireUser } from "@/lib/api-server";
 import type { Interview } from "@/lib/types";
 import { InterviewRoom } from "./room";
 
-export const metadata: Metadata = { title: "Interview", robots: { index: false } };
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+  return { title: t.meta.interview, robots: { index: false } };
+}
 
 export default async function InterviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

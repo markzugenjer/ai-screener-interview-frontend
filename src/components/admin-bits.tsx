@@ -1,23 +1,22 @@
-import { recommendationLabel, statusLabel } from "@/lib/format";
+import type { Dictionary } from "@/i18n/config";
 import type { Decision, InterviewStatus, Recommendation } from "@/lib/types";
+import { Reveal } from "./motion";
 import { Badge } from "./ui";
 
-export function RecommendationBadge({ value }: { value: Recommendation | "" }) {
+export function RecommendationBadge({ value, t }: { value: Recommendation | ""; t: Dictionary }) {
   if (!value) return <span className="text-ink-faint">—</span>;
   const tone = value === "strong_yes" || value === "yes" ? "sage" : value === "maybe" ? "amber" : "blush";
-  return <Badge tone={tone}>{recommendationLabel[value]}</Badge>;
+  return <Badge tone={tone}>{t.recommendation[value]}</Badge>;
 }
 
-export function StatusBadge({ value }: { value: InterviewStatus }) {
+export function StatusBadge({ value, t }: { value: InterviewStatus; t: Dictionary }) {
   const tone = value === "scored" ? "sage" : value === "failed" ? "danger" : value === "in_progress" ? "blush" : value === "completed" ? "amber" : "neutral";
-  return <Badge tone={tone}>{value === "scored" ? "Scored" : statusLabel[value]}</Badge>;
+  return <Badge tone={tone}>{value === "scored" ? t.status.scoredShort : t.status[value]}</Badge>;
 }
 
-const decisionLabel: Record<Decision, string> = { shortlist: "Shortlisted", reject: "Rejected", hold: "On hold" };
-
-export function DecisionBadge({ value }: { value: Decision | "" }) {
-  if (!value) return <Badge>To review</Badge>;
-  return <Badge tone={value === "shortlist" ? "sage" : value === "reject" ? "blush" : "amber"}>{decisionLabel[value]}</Badge>;
+export function DecisionBadge({ value, t }: { value: Decision | ""; t: Dictionary }) {
+  if (!value) return <Badge>{t.decision.none}</Badge>;
+  return <Badge tone={value === "shortlist" ? "sage" : value === "reject" ? "blush" : "amber"}>{t.decision[value]}</Badge>;
 }
 
 /** Overall score with a small bar; the bar is green at 50+ and pink below. */
@@ -35,12 +34,12 @@ export function ScoreBar({ value }: { value: number | undefined }) {
 
 export function PageTitle({ title, children, action }: { title: string; children?: React.ReactNode; action?: React.ReactNode }) {
   return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <Reveal className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div>
         <h1 className="text-[1.75rem] font-extrabold">{title}</h1>
         {children && <p className="mt-1 text-ink-soft">{children}</p>}
       </div>
       {action}
-    </div>
+    </Reveal>
   );
 }

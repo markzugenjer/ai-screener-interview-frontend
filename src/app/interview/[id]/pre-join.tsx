@@ -1,9 +1,12 @@
 "use client";
 
 import { Mic, MicOff } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 import { Alert, Button, Select } from "@/components/ui";
+import { useI18n } from "@/i18n/client";
+import { fmt } from "@/i18n/format";
 import { cn } from "@/lib/format";
 
 type MicState = "asking" | "ready" | "denied" | "missing";
@@ -24,6 +27,7 @@ export function PreJoin({
   error: string;
   onJoin: (deviceId?: string) => void;
 }) {
+  const { t } = useI18n();
   const [mic, setMic] = useState<MicState>("asking");
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [deviceId, setDeviceId] = useState<string>();
@@ -42,7 +46,7 @@ export function PreJoin({
           audio: { deviceId: deviceId ? { exact: deviceId } : undefined, echoCancellation: true, noiseSuppression: true },
         });
         if (cancelled) {
-          stream.getTracks().forEach((t) => t.stop());
+          stream.getTracks().forEach((tr) => tr.stop());
           return;
         }
         streamRef.current = stream;
@@ -76,45 +80,46 @@ export function PreJoin({
       cancelled = true;
       cancelAnimationFrame(raf);
       void ctx?.close();
-      streamRef.current?.getTracks().forEach((t) => t.stop());
+      streamRef.current?.getTracks().forEach((tr) => tr.stop());
       streamRef.current = null;
     };
   }, [deviceId]);
 
+  const status = { asking: t.room.micAsking, ready: heard ? t.room.micHeard : t.room.micSay, denied: t.room.micDenied, missing: t.room.micMissing }[mic];
+
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 pb-16">
-      <div className="rounded-[1.75rem] border border-line bg-paper p-6 shadow-lift sm:p-8">
-        <h1 className="text-2xl font-extrabold">Ready for your {title} interview?</h1>
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="rounded-[1.75rem] border border-line bg-paper p-6 shadow-lift sm:p-8"
+      >
+        <h1 className="text-2xl font-extrabold">{fmt(t.room.readyTitle, { title })}</h1>
         <p className="mt-2 leading-relaxed text-ink-soft">
-          About {minutes} minutes with Nara, in Bahasa Indonesia. Say something to check your microphone.
-          {isPractice && " This is a practice attempt."}
+          {fmt(t.room.readyBody, { n: minutes })}
+          {isPractice && t.room.practice}
         </p>
 
         <div className="mt-6 flex items-center gap-4 rounded-2xl bg-sage-50 p-4">
-          <span
-            className={cn(
-              "grid size-11 shrink-0 place-items-center rounded-full",
-              mic === "ready" ? "bg-sage-600 text-paper" : "bg-paper text-ink-faint",
-            )}
+          <motion.span
+            className={cn("grid size-11 shrink-0 place-items-center rounded-full", mic === "ready" ? "bg-sage-600 text-paper" : "bg-paper text-ink-faint")}
+            animate={{ scale: mic === "ready" ? 1 + level * 0.25 : 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 18 }}
           >
             {mic === "ready" ? <Mic className="size-5" aria-hidden /> : <MicOff className="size-5" aria-hidden />}
-          </span>
+          </motion.span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold">
-              {mic === "asking" && "Waiting for microphone permission…"}
-              {mic === "ready" && (heard ? "We can hear you" : "Say a few words")}
-              {mic === "denied" && "Microphone is blocked"}
-              {mic === "missing" && "No microphone found"}
-            </p>
+            <p className="text-sm font-semibold">{status}</p>
             <div
               className="mt-2 h-2 overflow-hidden rounded-full bg-paper"
               role="meter"
-              aria-label="Microphone level"
+              aria-label={t.room.micLevel}
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={Math.round(level * 100)}
             >
-              <div className="h-full rounded-full bg-sage-500 transition-[width] duration-75" style={{ width: `${Math.round(level * 100)}%` }} />
+              <div className="h-full origin-left rounded-full bg-sage-500 transition-transform duration-75" style={{ transform: `scaleX(${level})` }} />
             </div>
           </div>
         </div>
@@ -122,13 +127,13 @@ export function PreJoin({
         {devices.length > 1 && (
           <div className="mt-4">
             <label htmlFor="mic" className="mb-1.5 block text-sm font-semibold">
-              Microphone
+              {t.room.micLabel}
             </label>
             <Select id="mic" value={deviceId ?? ""} onChange={(e) => setDeviceId(e.target.value || undefined)}>
-              <option value="">System default</option>
+              <option value="">{t.room.micDefault}</option>
               {devices.map((d, i) => (
                 <option key={d.deviceId} value={d.deviceId}>
-                  {d.label || `Microphone ${i + 1}`}
+                  {d.label || fmt(t.room.micNumbered, { n: i + 1 })}
                 </option>
               ))}
             </Select>
@@ -137,9 +142,7 @@ export function PreJoin({
 
         {mic === "denied" && (
           <div className="mt-4">
-            <Alert tone="amber">
-              Allow microphone access in your browser&apos;s address bar (the lock or mic icon), then reload this page.
-            </Alert>
+            <Alert tone="amber">{t.room.micDeniedHelp}</Alert>
           </div>
         )}
         {error && (
@@ -149,13 +152,10 @@ export function PreJoin({
         )}
 
         <Button size="lg" className="mt-7 w-full" disabled={mic !== "ready"} loading={connecting} onClick={() => onJoin(deviceId)}>
-          {connecting ? "Connecting…" : "Join interview"}
+          {connecting ? t.room.connecting : t.room.join}
         </Button>
-        <p className="mt-4 text-center text-xs leading-relaxed text-ink-faint">
-          By joining, you agree that this interview is recorded as a transcript and evaluated by AI. A recruiter reviews
-          every result and makes the hiring decision.
-        </p>
-      </div>
+        <p className="mt-4 text-center text-xs leading-relaxed text-ink-faint">{t.room.consent}</p>
+      </motion.div>
     </main>
   );
 }

@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Brand } from "@/components/brand";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useI18n } from "@/i18n/client";
+import { errorMessage } from "@/lib/errors";
 import { api } from "@/lib/api-client";
 import type { Interview } from "@/lib/types";
 import { CallStage } from "./stage";
@@ -18,6 +21,7 @@ type Phase = "prejoin" | "connecting" | "live" | "ending" | "error";
  * The room is created once per mount and always disconnected on unmount.
  */
 export function InterviewRoom({ interview: initial, firstName }: { interview: Interview; firstName: string }) {
+  const { t } = useI18n();
   const router = useRouter();
   const [interview, setInterview] = useState(initial);
   const [phase, setPhase] = useState<Phase>("prejoin");
@@ -68,11 +72,11 @@ export function InterviewRoom({ interview: initial, firstName }: { interview: In
         setPhase("live");
       } catch (err) {
         await room.disconnect().catch(() => {});
-        setError(err instanceof Error ? err.message : "Couldn't connect to the interview.");
+        setError(errorMessage(err, t, t.room.connectError));
         setPhase("error");
       }
     },
-    [interview.id, room],
+    [interview.id, room, t],
   );
 
   const reset = useCallback(async () => {
@@ -86,7 +90,10 @@ export function InterviewRoom({ interview: initial, firstName }: { interview: In
     <div className="flex min-h-dvh flex-col bg-mist">
       <header className="flex h-16 items-center justify-between px-4 sm:px-6">
         <Brand href="/dashboard" />
-        <p className="truncate pl-4 text-sm font-semibold text-ink-soft">{interview.job?.title}</p>
+        <div className="flex min-w-0 items-center gap-2">
+          <p className="hidden truncate pl-4 text-sm font-semibold text-ink-soft sm:block">{interview.job?.title}</p>
+          <LanguageSwitcher />
+        </div>
       </header>
 
       {phase === "prejoin" || phase === "error" || phase === "connecting" ? (
@@ -109,7 +116,7 @@ export function InterviewRoom({ interview: initial, firstName }: { interview: In
           />
           <RoomAudioRenderer />
           <StartAudio
-            label="Tap to hear Nara"
+            label={t.room.tapToHear}
             className="fixed bottom-28 left-1/2 z-40 -translate-x-1/2 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-paper shadow-lift"
           />
         </RoomContext.Provider>

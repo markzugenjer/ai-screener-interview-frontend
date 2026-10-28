@@ -9,23 +9,14 @@ import {
 } from "@livekit/components-react";
 import type { LocalAudioTrack } from "livekit-client";
 import { Mic, MicOff, PhoneOff, RotateCcw } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { useI18n } from "@/i18n/client";
 import { api } from "@/lib/api-client";
 import { cn, formatDuration } from "@/lib/format";
 import type { Interview } from "@/lib/types";
-
-const agentStateText: Record<string, string> = {
-  disconnected: "Joining…",
-  connecting: "Joining…",
-  initializing: "Getting ready…",
-  idle: "Listening",
-  listening: "Listening",
-  thinking: "Thinking…",
-  speaking: "Speaking",
-};
 
 export function CallStage({
   interview,
@@ -40,6 +31,7 @@ export function CallStage({
   onLeave: () => Promise<void>;
   onReset: () => Promise<void>;
 }) {
+  const { t } = useI18n();
   const room = useRoomContext();
   const { state: agentState, audioTrack: agentTrack, agent } = useVoiceAssistant();
   const { localParticipant, isMicrophoneEnabled, microphoneTrack } = useLocalParticipant();
@@ -56,16 +48,25 @@ export function CallStage({
   const lines = useMemo(
     () =>
       transcriptions
-        .filter((t) => t.text.trim())
+        .filter((tr) => tr.text.trim())
         .slice(-2)
-        .map((t) => ({
-          id: t.streamInfo.id,
-          mine: t.participantInfo.identity === room.localParticipant.identity,
-          text: t.text,
+        .map((tr) => ({
+          id: tr.streamInfo.id,
+          mine: tr.participantInfo.identity === room.localParticipant.identity,
+          text: tr.text,
         })),
     [transcriptions, room.localParticipant.identity],
   );
 
+  const agentStateText: Record<string, string> = {
+    disconnected: t.room.joining,
+    connecting: t.room.joining,
+    initializing: t.room.gettingReady,
+    idle: t.room.listening,
+    listening: t.room.listening,
+    thinking: t.room.thinking,
+    speaking: t.room.speaking,
+  };
   const agentSpeaking = agentState === "speaking";
   const iAmSpeaking = isMicrophoneEnabled && myVolume > 0.08;
 
@@ -77,45 +78,57 @@ export function CallStage({
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-blush-400 opacity-70 motion-reduce:hidden" />
             <span className="relative inline-flex size-2.5 rounded-full bg-blush-600" />
           </span>
-          Live
+          {t.room.live}
         </span>
-        <span className="tabular font-semibold text-ink-soft" aria-label="Time elapsed">
+        <span className="tabular font-semibold text-ink-soft" aria-label={t.room.elapsed}>
           {formatDuration(elapsed)}
         </span>
       </div>
 
       <div className="grid flex-1 gap-4 md:grid-cols-2">
         <Tile
+          delay={0}
           tone="blush"
           name="Nara"
-          role="AI interviewer"
-          status={agent ? agentStateText[agentState] ?? "Listening" : "Joining…"}
+          role={t.room.aiRole}
+          status={agent ? agentStateText[agentState] ?? t.room.listening : t.room.joining}
           active={agentSpeaking}
           volume={agentVolume}
           initial="N"
         />
         <Tile
+          delay={0.08}
           tone="sage"
           name={firstName}
-          role="You"
-          status={isMicrophoneEnabled ? (iAmSpeaking ? "Speaking" : "Mic on") : "Muted"}
+          role={t.room.you}
+          status={isMicrophoneEnabled ? (iAmSpeaking ? t.room.speaking : t.room.micOn) : t.room.muted}
           active={iAmSpeaking}
           volume={isMicrophoneEnabled ? myVolume : 0}
           initial={firstName[0] ?? "Y"}
         />
       </div>
 
-      <section aria-label="Live subtitles" aria-live="polite" className="mt-4 min-h-[6.5rem] rounded-card border border-line bg-paper px-5 py-4">
+      <section aria-label={t.room.subtitles} aria-live="polite" className="mt-4 min-h-[6.5rem] rounded-card border border-line bg-paper px-5 py-4">
         {lines.length === 0 ? (
-          <p className="text-ink-faint">{agent ? "Subtitles will appear here as you talk." : "Nara is joining the call…"}</p>
+          <p className="text-ink-faint">{agent ? t.room.subtitlesEmpty : t.room.naraJoining}</p>
         ) : (
           <div className="space-y-1.5">
-            {lines.map((l, i) => (
-              <p key={l.id} className={cn("leading-relaxed", i === lines.length - 1 ? "text-[1.0625rem] text-ink" : "text-sm text-ink-faint")}>
-                <span className={cn("mr-2 font-bold", l.mine ? "text-sage-600" : "text-blush-600")}>{l.mine ? "You" : "Nara"}</span>
-                {l.text}
-              </p>
-            ))}
+            <AnimatePresence initial={false} mode="popLayout">
+              {lines.map((l, i) => (
+                <motion.p
+                  key={l.id}
+                  layout="position"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className={cn("leading-relaxed", i === lines.length - 1 ? "text-[1.0625rem] text-ink" : "text-sm text-ink-faint")}
+                >
+                  <span className={cn("mr-2 font-bold", l.mine ? "text-sage-600" : "text-blush-600")}>{l.mine ? t.room.you : "Nara"}</span>
+                  {l.text}
+                </motion.p>
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </section>
@@ -123,52 +136,53 @@ export function CallStage({
       <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
         <ControlButton
           onClick={() => void localParticipant.setMicrophoneEnabled(!isMicrophoneEnabled)}
-          label={isMicrophoneEnabled ? "Mute" : "Unmute"}
+          label={isMicrophoneEnabled ? t.room.mute : t.room.unmute}
           pressed={!isMicrophoneEnabled}
           icon={isMicrophoneEnabled ? <Mic className="size-5" aria-hidden /> : <MicOff className="size-5" aria-hidden />}
         />
         <ControlButton
           onClick={() => setConfirm("reset")}
-          label="Reset interview"
+          label={t.room.reset}
           disabled={!canReset || ending}
-          title={canReset ? undefined : "Reset is only available once, in the first 2 minutes"}
+          title={canReset ? undefined : t.room.resetDisabled}
           icon={<RotateCcw className="size-5" aria-hidden />}
         />
         <button
           type="button"
           onClick={() => setConfirm("leave")}
           disabled={ending}
-          className="inline-flex h-12 items-center gap-2 rounded-full bg-blush-600 px-6 font-semibold text-paper transition-colors hover:bg-blush-700 disabled:opacity-60"
+          className="inline-flex h-12 items-center gap-2 rounded-full bg-blush-600 px-6 font-semibold text-paper transition-colors hover:bg-blush-700 active:scale-[0.97] disabled:opacity-60"
         >
           <PhoneOff className="size-5" aria-hidden />
-          {ending ? "Ending…" : "Leave interview"}
+          {ending ? t.room.ending : t.room.leave}
         </button>
       </div>
 
       <ConfirmDialog
         open={confirm === "leave"}
-        title="Leave the interview?"
-        confirmLabel="Leave and see feedback"
+        title={t.room.leaveTitle}
+        confirmLabel={t.room.leaveConfirm}
         tone="danger"
         onClose={() => setConfirm(null)}
         onConfirm={onLeave}
       >
-        Your answers so far will be scored. You won&apos;t be able to continue this interview.
+        {t.room.leaveBody}
       </ConfirmDialog>
       <ConfirmDialog
         open={confirm === "reset"}
-        title="Start over?"
-        confirmLabel="Reset interview"
+        title={t.room.resetTitle}
+        confirmLabel={t.room.resetConfirm}
         onClose={() => setConfirm(null)}
         onConfirm={onReset}
       >
-        Everything said so far is cleared and Nara starts again. You can only do this once.
+        {t.room.resetBody}
       </ConfirmDialog>
     </main>
   );
 }
 
 function Tile({
+  delay,
   tone,
   name,
   role,
@@ -177,6 +191,7 @@ function Tile({
   volume,
   initial,
 }: {
+  delay: number;
   tone: "blush" | "sage";
   name: string;
   role: string;
@@ -189,7 +204,12 @@ function Tile({
   const pink = tone === "blush";
   const scale = reduce ? 1 : 1 + Math.min(volume, 1) * 0.55;
   return (
-    <div className={cn("relative grid min-h-56 place-items-center overflow-hidden rounded-[1.75rem] md:min-h-80", pink ? "bg-blush-50" : "bg-sage-50")}>
+    <motion.div
+      initial={{ opacity: 0, y: 18, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay }}
+      className={cn("relative grid min-h-56 place-items-center overflow-hidden rounded-[1.75rem] md:min-h-80", pink ? "bg-blush-50" : "bg-sage-50")}
+    >
       <div className="relative grid place-items-center">
         <motion.span
           aria-hidden
@@ -220,7 +240,7 @@ function Tile({
           {status}
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -247,7 +267,7 @@ function ControlButton({
       aria-pressed={pressed}
       title={title}
       className={cn(
-        "inline-flex h-12 items-center gap-2 rounded-full border px-5 font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-45",
+        "inline-flex h-12 items-center gap-2 rounded-full border px-5 font-semibold transition-[background-color,border-color,transform] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:active:scale-100",
         pressed ? "border-ink bg-ink text-paper" : "border-line bg-paper text-ink hover:border-sage-200 hover:bg-sage-50",
       )}
     >

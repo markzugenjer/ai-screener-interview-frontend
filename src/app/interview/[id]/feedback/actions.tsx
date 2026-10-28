@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Alert, Button } from "@/components/ui";
+import { useI18n } from "@/i18n/client";
 import { api } from "@/lib/api-client";
+import { errorMessage } from "@/lib/errors";
 import type { Interview } from "@/lib/types";
 
 /** Re-renders the page every few seconds until the score arrives (stops after 5 minutes). */
@@ -13,16 +15,17 @@ export function RefreshWhilePending() {
   const router = useRouter();
   useEffect(() => {
     const started = Date.now();
-    const t = setInterval(() => {
-      if (Date.now() - started > 5 * 60_000) clearInterval(t);
+    const timer = setInterval(() => {
+      if (Date.now() - started > 5 * 60_000) clearInterval(timer);
       else router.refresh();
     }, 4000);
-    return () => clearInterval(t);
+    return () => clearInterval(timer);
   }, [router]);
   return null;
 }
 
 export function RetakeButton({ slug }: { slug: string }) {
+  const { t } = useI18n();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -40,12 +43,12 @@ export function RetakeButton({ slug }: { slug: string }) {
             router.push(`/interview/${interview.id}`);
           } catch (err) {
             setBusy(false);
-            setError(err instanceof Error ? err.message : "Couldn't start a new interview.");
+            setError(errorMessage(err, t, t.feedback.retakeError));
           }
         }}
       >
         {!busy && <RotateCcw className="size-4" aria-hidden />}
-        Retake interview
+        {t.feedback.retake}
       </Button>
       {error && (
         <div className="mt-2">

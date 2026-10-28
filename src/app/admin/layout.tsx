@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 
 import { SiteHeader } from "@/components/site-header";
+import { getI18n } from "@/i18n/server";
 import { requireStaff } from "@/lib/api-server";
 import { AdminNav } from "./admin-nav";
 
-export const metadata: Metadata = { title: { default: "Recruiter area", template: "%s · Recruiter · Nara" }, robots: { index: false } };
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+  return { title: { default: t.meta.recruiter, template: `%s · ${t.meta.recruiter} · Nara` }, robots: { index: false } };
+}
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await requireStaff("/admin");
@@ -15,7 +19,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <AdminNav />
         </aside>
-        <div className="min-w-0">{children}</div>
+        <div className="isolate min-w-0">{children}</div>
       </div>
     </>
   );

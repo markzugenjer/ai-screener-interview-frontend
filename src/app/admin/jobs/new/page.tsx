@@ -1,18 +1,24 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { PageTitle } from "@/components/admin-bits";
+import { getI18n } from "@/i18n/server";
 import { JobForm } from "../job-form";
 
-export const metadata = { title: "New job" };
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+  return { title: t.meta.newJob };
+}
 
-export default function NewJobPage() {
+export default async function NewJobPage() {
+  const { t } = await getI18n();
   return (
     <>
       <Link href="/admin/jobs" className="text-sm font-medium text-ink-soft hover:text-ink">
-        ← Jobs
+        {t.admin.backToJobs}
       </Link>
       <div className="mt-4">
-        <PageTitle title="New job">Save as a draft first if you&apos;re still writing questions.</PageTitle>
+        <PageTitle title={t.admin.newJob}>{t.admin.newJobLead}</PageTitle>
       </div>
       <JobForm />
     </>

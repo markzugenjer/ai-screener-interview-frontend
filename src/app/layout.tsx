@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+
+import { AppProviders } from "@/i18n/client";
+import { getI18n } from "@/i18n/server";
 import "./globals.css";
 
 // Plus Jakarta Sans, designed in Jakarta. Self-hosted: no third-party font requests.
@@ -13,12 +16,14 @@ const jakarta = localFont({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: { default: "Nara — AI screening interviews", template: "%s · Nara" },
-  description:
-    "Apply for a role and do your first interview by voice, in Bahasa Indonesia, whenever it suits you. Get feedback right after.",
-  robots: { index: true, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+  return {
+    title: { default: t.meta.title, template: "%s · Nara" },
+    description: t.meta.description,
+    robots: { index: true, follow: true },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
@@ -26,10 +31,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const { locale } = await getI18n();
   return (
-    <html lang="en" className={jakarta.variable}>
-      <body className="min-h-dvh font-sans">{children}</body>
+    <html lang={locale} className={jakarta.variable}>
+      <body className="min-h-dvh font-sans">
+        <AppProviders locale={locale}>{children}</AppProviders>
+      </body>
     </html>
   );
 }

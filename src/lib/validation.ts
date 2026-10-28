@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+import type { Dictionary } from "@/i18n/config";
+import { fmt } from "@/i18n/format";
+
 // Mirrors the Go API's rules so most mistakes are caught before a request is sent.
 // The server always re-validates; these checks are only for faster feedback.
 
@@ -15,30 +18,34 @@ export function normalizeWhatsApp(raw: string): string | null {
   return /^8\d{8,11}$/.test(d) ? `+62${d}` : null;
 }
 
-export const registerSchema = z
-  .object({
-    fullName: z
-      .string()
-      .trim()
-      .min(2, "Enter your full name.")
-      .max(100, "Name is too long.")
-      .regex(/^[\p{L}\p{M}' .-]+$/u, "Use letters only."),
-    email: z.string().trim().toLowerCase().email("Enter a valid email address."),
-    password: z
-      .string()
-      .min(8, "Use at least 8 characters.")
-      .max(128, "Use at most 128 characters.")
-      .regex(/\p{L}/u, "Include at least one letter.")
-      .regex(/\d/, "Include at least one number."),
-    confirmPassword: z.string(),
-    whatsapp: z.string().refine((v) => normalizeWhatsApp(v) !== null, "Enter a valid WhatsApp number, e.g. 0812 3456 7890."),
-    resume: z
-      .instanceof(File, { message: "Upload your resume (PDF or DOCX)." })
-      .refine((f) => f.size > 0, "The file is empty.")
-      .refine((f) => f.size <= MAX_RESUME_MB * 1024 * 1024, `Resume must be ${MAX_RESUME_MB} MB or smaller.`)
-      .refine((f) => RESUME_TYPES.includes(f.type) || /\.(pdf|docx)$/i.test(f.name), "Resume must be a PDF or DOCX file."),
-  })
-  .refine((v) => v.password === v.confirmPassword, { path: ["confirmPassword"], message: "Passwords do not match." });
+/** Registration rules with messages in the visitor's language. */
+export function registerSchema(t: Dictionary) {
+  const v = t.validation;
+  return z
+    .object({
+      fullName: z
+        .string()
+        .trim()
+        .min(2, v.fullName)
+        .max(100, v.nameTooLong)
+        .regex(/^[\p{L}\p{M}' .-]+$/u, v.lettersOnly),
+      email: z.string().trim().toLowerCase().email(v.email),
+      password: z
+        .string()
+        .min(8, v.passwordMin)
+        .max(128, v.passwordMax)
+        .regex(/\p{L}/u, v.passwordLetter)
+        .regex(/\d/, v.passwordNumber),
+      confirmPassword: z.string(),
+      whatsapp: z.string().refine((s) => normalizeWhatsApp(s) !== null, v.whatsapp),
+      resume: z
+        .instanceof(File, { message: v.resumeRequired })
+        .refine((f) => f.size > 0, v.resumeEmpty)
+        .refine((f) => f.size <= MAX_RESUME_MB * 1024 * 1024, fmt(v.resumeSize, { mb: MAX_RESUME_MB }))
+        .refine((f) => RESUME_TYPES.includes(f.type) || /\.(pdf|docx)$/i.test(f.name), v.resumeType),
+    })
+    .refine((x) => x.password === x.confirmPassword, { path: ["confirmPassword"], message: v.passwordMatch });
+}
 
 export type FieldErrors = Partial<Record<string, string>>;
 
