@@ -123,7 +123,7 @@ export default async function Home() {
           </Stagger>
         </section>
 
-        <section className="mx-auto max-w-6xl px-4 pb-16 pt-4 sm:px-6">
+        <section className="mx-auto max-w-6xl px-4 pt-4 sm:px-6">
           <Reveal>
             <div className="relative isolate overflow-hidden rounded-[1.75rem] border border-line bg-gradient-to-br from-sage-50 via-paper to-blush-50 px-6 py-10 sm:px-10 sm:py-12">
               <div aria-hidden className="motion-loop absolute -right-16 -top-20 -z-10 size-64 animate-drift rounded-full bg-blush-100/80 blur-3xl" />
