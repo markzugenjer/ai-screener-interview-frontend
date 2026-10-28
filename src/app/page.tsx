@@ -1,11 +1,11 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BriefcaseBusiness } from "lucide-react";
 
 import { JobCard } from "@/components/cards";
 import { HeroDemo } from "@/components/hero-demo";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { EmptyState, LinkButton } from "@/components/ui";
+import { buttonClass, EmptyState, LinkButton } from "@/components/ui";
 import { getI18n } from "@/i18n/server";
 import { apiServer, currentUser } from "@/lib/api-server";
 import type { Job } from "@/lib/types";
@@ -121,6 +121,35 @@ export default async function Home() {
               </StaggerItem>
             ))}
           </Stagger>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-4 pb-16 pt-4 sm:px-6">
+          <Reveal>
+            <div className="relative isolate overflow-hidden rounded-[1.75rem] border border-line bg-gradient-to-br from-sage-50 via-paper to-blush-50 px-6 py-10 sm:px-10 sm:py-12">
+              <div aria-hidden className="motion-loop absolute -right-16 -top-20 -z-10 size-64 animate-drift rounded-full bg-blush-100/80 blur-3xl" />
+              <div aria-hidden className="motion-loop absolute -bottom-24 -left-10 -z-10 size-64 animate-drift rounded-full bg-sage-100/80 blur-3xl [animation-delay:-8s]" />
+              <div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
+                <div className="max-w-xl">
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-sage-700">
+                    <BriefcaseBusiness className="size-4" aria-hidden />
+                    {t.landing.careersEyebrow}
+                  </span>
+                  <h2 className="mt-2 text-[1.75rem] font-extrabold leading-tight sm:text-[2rem]">{t.landing.careersTitle}</h2>
+                  <p className="mt-2 leading-relaxed text-ink-soft">{t.landing.careersBody}</p>
+                </div>
+                <a
+                  href="https://career.fdcdentalclinic.co.id/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonClass("primary", "lg", "group shrink-0 self-start shadow-[0_10px_24px_-10px_rgb(29_43_35/0.6)] md:self-auto")}
+                >
+                  {t.landing.careersCta}
+                  <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                  <span className="sr-only">({t.landing.careersNewTab})</span>
+                </a>
+              </div>
+            </div>
+          </Reveal>
         </section>
       </main>
       <SiteFooter />
