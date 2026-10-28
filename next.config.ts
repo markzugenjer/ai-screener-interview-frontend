@@ -14,6 +14,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Self-contained server bundle (server.js + traced node_modules) for the container image.
+  output: "standalone",
   reactStrictMode: true,
   // Pages are rendered per request (needed for CSP nonces and per-user data).
   cacheComponents: false,
@@ -25,8 +27,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  // /api/v1/* is forwarded to the Go API by src/app/api/v1/[...path]/route.ts,
-  // which reads API_INTERNAL_URL at runtime (a rewrite here would be fixed at build).
+  // /api/v1/* (and, for the voice agent, /internal/*) are forwarded to the Go API by
+  // route handlers that read API_INTERNAL_URL at runtime (a rewrite here would be
+  // fixed at build time). See src/lib/forward.ts.
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
