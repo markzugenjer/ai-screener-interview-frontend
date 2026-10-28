@@ -31,7 +31,7 @@ export default async function EditJobPage({ params }: { params: Promise<{ id: st
       <div className="mt-4">
         <PageTitle title={data.job.title}>
           {data.job.status === "open" ? (
-            <Link href={`/jobs/${data.job.slug}`} className="text-sage-700 hover:underline">
+            <Link href={`/jobs/${data.job.slug}`} className="text-sage-700 underline decoration-transparent hover:decoration-current">
               {t.admin.viewOnBoard}
             </Link>
           ) : (

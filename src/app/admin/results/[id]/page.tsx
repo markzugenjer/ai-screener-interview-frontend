@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.meta.result };
 }
 
-const pill = "inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-semibold transition-[background-color,transform] active:scale-[0.97]";
+const pill = "inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-semibold transition-[background-color,transform,translate,scale] active:scale-[0.97]";
 
 export default async function ResultPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

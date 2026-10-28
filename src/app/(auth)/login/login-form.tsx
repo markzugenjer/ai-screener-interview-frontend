@@ -71,7 +71,7 @@ export function LoginForm({ next }: { next?: string }) {
       </Button>
       <p className="text-center text-sm text-ink-soft">
         {t.auth.noAccount}{" "}
-        <Link href={next ? `/register?next=${encodeURIComponent(next)}` : "/register"} className="font-semibold text-sage-700 underline-offset-4 hover:underline">
+        <Link href={next ? `/register?next=${encodeURIComponent(next)}` : "/register"} className="font-semibold text-sage-700 underline-offset-4 underline decoration-transparent hover:decoration-current">
           {t.auth.toRegister}
         </Link>
       </p>

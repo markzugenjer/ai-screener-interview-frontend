@@ -53,7 +53,7 @@ function CornerTab({ children }: { children: React.ReactNode }) {
 
 const cardShell =
   "group relative flex h-full flex-col rounded-card border border-line bg-paper p-6 shadow-lift " +
-  "transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-sage-200 " +
+  "transition-[transform,translate,scale,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-sage-200 " +
   "hover:shadow-[0_2px_4px_rgb(29_43_35/0.04),0_18px_36px_-16px_rgb(29_43_35/0.18)]";
 
 /** All attempts for one job in a single card: latest date, attempt count, latest score. */

@@ -189,7 +189,7 @@ export function RegisterForm({ next }: { next?: string }) {
       </Button>
       <p className="text-center text-sm text-ink-soft">
         {t.auth.haveAccount}{" "}
-        <Link href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"} className="font-semibold text-sage-700 underline-offset-4 hover:underline">
+        <Link href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"} className="font-semibold text-sage-700 underline-offset-4 underline decoration-transparent hover:decoration-current">
           {t.auth.toLogin}
         </Link>
       </p>

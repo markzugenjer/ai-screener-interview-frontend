@@ -40,7 +40,7 @@ export default async function AdminOverview() {
       <section className="mt-12">
         <Reveal className="flex items-end justify-between gap-4">
           <h2 className="text-xl font-bold">{t.admin.topToReview}</h2>
-          <Link href="/admin/results?decision=none&status=scored&sort=-overall" className="text-sm font-semibold text-sage-700 hover:underline">
+          <Link href="/admin/results?decision=none&status=scored&sort=-overall" className="text-sm font-semibold text-sage-700 underline decoration-transparent hover:decoration-current">
             {t.admin.seeAll}
           </Link>
         </Reveal>

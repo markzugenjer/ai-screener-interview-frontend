@@ -268,7 +268,7 @@ function ControlButton({
       aria-pressed={pressed}
       title={title}
       className={cn(
-        "inline-flex h-12 items-center gap-2 rounded-full border px-5 font-semibold transition-[background-color,border-color,transform] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:active:scale-100",
+        "inline-flex h-12 items-center gap-2 rounded-full border px-5 font-semibold transition-[background-color,border-color,transform,translate,scale] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 disabled:active:scale-100",
         pressed ? "border-ink bg-ink text-paper" : "border-line bg-paper text-ink hover:border-sage-200 hover:bg-sage-50",
       )}
     >

@@ -8,12 +8,12 @@ type Variant = "primary" | "secondary" | "ghost" | "ghostDanger" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-ink text-paper hover:bg-sage-700 disabled:bg-ink/40",
-  secondary: "bg-sage-100 text-sage-700 hover:bg-sage-200 disabled:opacity-50",
+  primary: "bg-ink text-paper hover:-translate-y-px hover:bg-sage-700 disabled:translate-y-0 disabled:bg-ink/40",
+  secondary: "bg-sage-100 text-sage-700 hover:-translate-y-px hover:bg-sage-200 disabled:translate-y-0 disabled:opacity-50",
   ghost: "text-ink-soft hover:bg-mist hover:text-ink disabled:opacity-50",
   // Quiet until hovered, then soft red: for actions like log out.
   ghostDanger: "text-ink-soft hover:bg-danger-soft hover:text-danger disabled:opacity-50",
-  danger: "bg-danger-soft text-danger hover:bg-blush-100 disabled:opacity-50",
+  danger: "bg-danger-soft text-danger hover:-translate-y-px hover:bg-blush-100 disabled:translate-y-0 disabled:opacity-50",
 };
 const sizes: Record<Size, string> = {
   sm: "h-9 px-4 text-sm",
@@ -24,7 +24,7 @@ const sizes: Record<Size, string> = {
 export function buttonClass(variant: Variant = "primary", size: Size = "md", extra?: string) {
   return cn(
     "inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-semibold",
-    "transition-[background-color,color,transform] duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:active:scale-100",
+    "transition-[background-color,color,box-shadow,transform,translate,scale] duration-200 ease-out active:scale-[0.97] disabled:cursor-not-allowed disabled:active:scale-100",
     variants[variant],
     sizes[size],
     extra,

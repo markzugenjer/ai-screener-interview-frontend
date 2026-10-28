@@ -69,7 +69,7 @@ export function ReviewPanel({ interviewId, current }: { interviewId: string; cur
               />
               <span
                 className={cn(
-                  "flex h-10 items-center justify-center rounded-full border border-line text-sm font-semibold text-ink-soft transition-[background-color,border-color,color,transform] active:scale-95 peer-focus-visible:ring-2 peer-focus-visible:ring-sage-500",
+                  "flex h-10 items-center justify-center rounded-full border border-line text-sm font-semibold text-ink-soft transition-[background-color,border-color,color,transform,translate,scale] active:scale-95 peer-focus-visible:ring-2 peer-focus-visible:ring-sage-500",
                   tones[o.value],
                 )}
               >

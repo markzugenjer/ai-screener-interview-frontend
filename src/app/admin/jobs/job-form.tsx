@@ -334,7 +334,7 @@ function IconBtn({ label, onClick, disabled, children }: { label: string; onClic
       title={label}
       onClick={onClick}
       disabled={disabled}
-      className="grid size-9 place-items-center rounded-full text-ink-faint transition-[background-color,color,transform] hover:bg-paper hover:text-ink active:scale-90 disabled:opacity-30"
+      className="grid size-9 place-items-center rounded-full text-ink-faint transition-[background-color,color,transform,translate,scale] hover:bg-paper hover:text-ink active:scale-90 disabled:opacity-30"
     >
       {children}
     </button>

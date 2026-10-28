@@ -114,7 +114,7 @@ export default async function JobPage({ params }: Props) {
               {open ? (
                 <Link
                   href={`/interview/${open.id}`}
-                  className="inline-flex h-13 w-full items-center justify-center rounded-full bg-ink text-base font-semibold text-paper transition-[background-color,transform] hover:bg-sage-700 active:scale-[0.97]"
+                  className="inline-flex h-13 w-full items-center justify-center rounded-full bg-ink text-base font-semibold text-paper transition-[background-color,transform,translate,scale] hover:bg-sage-700 active:scale-[0.97]"
                 >
                   {t.job.continue}
                 </Link>

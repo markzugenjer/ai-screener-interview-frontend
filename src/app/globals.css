@@ -87,6 +87,17 @@ dialog[open]::backdrop {
 }
 
 @layer base {
+  /*
+   * Smooth hover by default. :where() has zero specificity, so any element's own
+   * transition-* utility still wins. Tailwind v4 moves things with the translate /
+   * scale / rotate properties, so those are listed next to transform.
+   */
+  :where(a, button, summary, label, select, input, textarea, [role="button"], [role="option"], [role="menuitem"], [class*="hover:"]) {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke,
+      box-shadow, opacity, transform, translate, scale, rotate;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
@@ -128,5 +139,13 @@ dialog[open]::backdrop {
 @media (prefers-reduced-motion: reduce) {
   .motion-loop {
     animation: none !important;
+  }
+  /* Keep colour fades, drop movement. */
+  :where(a, button, summary, label, [role="button"], [role="option"], [role="menuitem"], [class*="hover:"]) {
+    transition-property: color, background-color, border-color, text-decoration-color, box-shadow, opacity;
+  }
+  .hover\:-translate-y-px:hover,
+  .hover\:-translate-y-1:hover {
+    translate: none;
   }
 }
