@@ -38,6 +38,7 @@ const en = {
     createAccount: "Create account",
     createAccountShort: "Sign up",
     logout: "Log out",
+    menu: "Menu",
     main: "Main",
   },
   footer: {

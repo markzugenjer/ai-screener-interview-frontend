@@ -8,24 +8,26 @@ import { useI18n } from "@/i18n/client";
 import { api } from "@/lib/api-client";
 import { Button } from "./ui";
 
-export function LogoutButton() {
-  const { t } = useI18n();
+/** Ends the session and returns to the login page. */
+export function useLogout() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  async function logout() {
+    setBusy(true);
+    await api("POST", "/auth/logout").catch(() => {});
+    router.replace("/login");
+    router.refresh();
+  }
+  return { busy, logout };
+}
+
+export function LogoutButton() {
+  const { t } = useI18n();
+  const { busy, logout } = useLogout();
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      loading={busy}
-      onClick={async () => {
-        setBusy(true);
-        await api("POST", "/auth/logout").catch(() => {});
-        router.replace("/login");
-        router.refresh();
-      }}
-    >
+    <Button variant="ghost" size="sm" loading={busy} onClick={logout}>
       {!busy && <LogOut className="size-4" aria-hidden />}
-      <span className="hidden sm:inline">{t.nav.logout}</span>
+      {t.nav.logout}
     </Button>
   );
 }

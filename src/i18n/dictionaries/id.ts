@@ -38,6 +38,7 @@ const id: Dictionary = {
     createAccount: "Buat akun",
     createAccountShort: "Daftar",
     logout: "Keluar",
+    menu: "Menu",
     main: "Utama",
   },
   footer: {

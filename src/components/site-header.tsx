@@ -5,11 +5,17 @@ import type { User } from "@/lib/types";
 import { Brand } from "./brand";
 import { LanguageSwitcher } from "./language-switcher";
 import { LogoutButton } from "./logout-button";
+import { MobileMenu } from "./mobile-menu";
 import { LinkButton } from "./ui";
 
 export async function SiteHeader({ user }: { user: User | null }) {
   const { t } = await getI18n();
   const staff = user?.role === "recruiter" || user?.role === "admin";
+  const menuLinks = [
+    { href: user ? "/dashboard#jobs" : "/#jobs", label: t.nav.openRoles },
+    ...(user && !staff ? [{ href: "/dashboard#interviews", label: t.nav.myInterviews }] : []),
+    ...(staff ? [{ href: "/admin", label: t.nav.recruiterArea }] : []),
+  ];
   const link = "rounded-full px-3 py-1.5 transition-colors hover:bg-mist hover:text-ink";
   return (
     <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/85 backdrop-blur-md">
@@ -35,7 +41,12 @@ export async function SiteHeader({ user }: { user: User | null }) {
           {user ? (
             <>
               <span className="hidden text-sm text-ink-soft md:inline">{user.fullName}</span>
-              <LogoutButton />
+              <span className="hidden sm:contents">
+                <LogoutButton />
+              </span>
+              <span className="contents sm:hidden">
+                <MobileMenu name={user.fullName} email={user.email} links={menuLinks} />
+              </span>
             </>
           ) : (
             <>
@@ -50,13 +61,6 @@ export async function SiteHeader({ user }: { user: User | null }) {
           )}
         </div>
       </div>
-      {staff && (
-        <div className="border-t border-line/70 sm:hidden">
-          <Link href="/admin" className="block px-4 py-2 text-sm font-medium text-sage-700">
-            {t.nav.recruiterArea}
-          </Link>
-        </div>
-      )}
     </header>
   );
 }
