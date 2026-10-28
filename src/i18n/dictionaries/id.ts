@@ -45,6 +45,18 @@ const id: Dictionary = {
   },
   landing: {
     headline: "Wawancara pertamamu, kapan pun kamu siap.",
+    headlineStart: "Wawancara pertamamu,",
+    headlineAccent: "kapan pun kamu siap.",
+    eyebrow: "Screening AI dalam Bahasa Indonesia",
+    perks: [
+      { value: "~20 mnt", label: "Wawancara suara" },
+      { value: "Instan", label: "Feedback langsung" },
+      { value: "100%", label: "Direview rekruter" },
+    ],
+    demoRole: "Junior Frontend Developer",
+    demoScore: "Komunikasi",
+    demoReady: "Feedback siap",
+    demoEncrypted: "Terenkripsi & privat",
     lead: "Ngobrol dengan Nara, pewawancara AI kami, dalam Bahasa Indonesia. Sekitar 20 menit dari mana saja, dan feedback langsung muncul begitu selesai.",
     ctaRegister: "Buat akun",
     ctaDashboard: "Buka dasborku",

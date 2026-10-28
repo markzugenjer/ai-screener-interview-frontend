@@ -43,6 +43,27 @@
   --animate-pop: pop 0.22s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-fade: fade 0.2s ease-out;
 
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-drift: drift 18s ease-in-out infinite;
+  --animate-wave: wave 1s ease-in-out infinite;
+  --animate-ping-soft: ping-soft 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33% { transform: translate3d(4%, -6%, 0) scale(1.06); }
+    66% { transform: translate3d(-5%, 4%, 0) scale(0.96); }
+  }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.35); }
+    50% { transform: scaleY(1); }
+  }
+  @keyframes ping-soft {
+    75%, 100% { transform: scale(2.2); opacity: 0; }
+  }
   @keyframes breathe {
     0%, 100% { transform: scale(1); opacity: 0.55; }
     50% { transform: scale(1.12); opacity: 0.9; }
@@ -100,5 +121,12 @@ dialog[open]::backdrop {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Decorative loops stop for people who prefer less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .motion-loop {
+    animation: none !important;
   }
 }

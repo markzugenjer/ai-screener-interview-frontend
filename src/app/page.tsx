@@ -1,3 +1,5 @@
+import { ArrowRight } from "lucide-react";
+
 import { JobCard } from "@/components/cards";
 import { HeroDemo } from "@/components/hero-demo";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
@@ -23,26 +25,59 @@ export default async function Home() {
     <>
       <SiteHeader user={user} />
       <main>
-        <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 md:grid-cols-[1.05fr_1fr] md:pt-20">
-          <div>
-            <Reveal>
-              <h1 className="text-[2.5rem] font-extrabold leading-[1.05] sm:text-[3.25rem]">{t.landing.headline}</h1>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">{t.landing.lead}</p>
-            </Reveal>
-            <Reveal delay={0.16}>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <LinkButton href={user ? "/dashboard" : "/register"} size="lg">
-                  {user ? t.landing.ctaDashboard : t.landing.ctaRegister}
-                </LinkButton>
-                <LinkButton href="#jobs" variant="secondary" size="lg">
-                  {t.landing.ctaRoles}
-                </LinkButton>
-              </div>
-            </Reveal>
+        <section className="relative isolate overflow-hidden">
+          {/* Soft colour fields and a faint dot grid behind the hero. */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <div className="motion-loop absolute -left-32 -top-24 size-[28rem] animate-drift rounded-full bg-sage-100/70 blur-3xl" />
+            <div className="motion-loop absolute -right-24 top-10 size-[30rem] animate-drift rounded-full bg-blush-100/80 blur-3xl [animation-delay:-6s]" />
+            <div className="motion-loop absolute bottom-0 left-1/3 size-72 animate-drift rounded-full bg-sage-50 blur-3xl [animation-delay:-12s]" />
+            <div className="absolute inset-0 bg-[radial-gradient(rgb(29_43_35/0.07)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_40%,black,transparent)]" />
           </div>
-          <HeroDemo />
+
+          <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-12 sm:px-6 md:grid-cols-[1.05fr_1fr] md:pb-24 md:pt-20">
+            <div>
+              <Reveal>
+                <span className="inline-flex items-center gap-2 rounded-full border border-sage-200 bg-paper/80 py-1.5 pl-2 pr-3.5 text-sm font-semibold text-sage-700 shadow-sm backdrop-blur">
+                  <span className="relative flex size-2.5">
+                    <span className="motion-loop absolute inset-0 animate-ping-soft rounded-full bg-sage-500/60" />
+                    <span className="relative size-2.5 rounded-full bg-sage-500" />
+                  </span>
+                  {t.landing.eyebrow}
+                </span>
+              </Reveal>
+              <Reveal delay={0.06}>
+                <h1 className="mt-6 text-[2.6rem] font-extrabold leading-[1.04] tracking-tight sm:text-[3.6rem]">
+                  {t.landing.headlineStart}{" "}
+                  <span className="bg-[linear-gradient(transparent_64%,var(--color-blush-100)_64%,var(--color-blush-100)_92%,transparent_92%)] box-decoration-clone text-sage-600">
+                    {t.landing.headlineAccent}
+                  </span>
+                </h1>
+              </Reveal>
+              <Reveal delay={0.12}>
+                <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">{t.landing.lead}</p>
+              </Reveal>
+              <Reveal delay={0.18}>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <LinkButton href={user ? "/dashboard" : "/register"} size="lg" className="group gap-2 shadow-[0_10px_24px_-10px_rgb(29_43_35/0.6)]">
+                    {user ? t.landing.ctaDashboard : t.landing.ctaRegister}
+                    <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
+                  </LinkButton>
+                  <LinkButton href="#jobs" variant="secondary" size="lg">
+                    {t.landing.ctaRoles}
+                  </LinkButton>
+                </div>
+              </Reveal>
+              <Stagger as="ul" className="mt-10 flex max-w-lg divide-x divide-line">
+                {t.landing.perks.map((p) => (
+                  <StaggerItem as="li" key={p.label} className="flex-1 px-4 first:pl-0 last:pr-0">
+                    <div className="text-xl font-extrabold tabular sm:text-2xl">{p.value}</div>
+                    <div className="mt-0.5 text-xs font-medium text-ink-faint sm:text-sm">{p.label}</div>
+                  </StaggerItem>
+                ))}
+              </Stagger>
+            </div>
+            <HeroDemo />
+          </div>
         </section>
 
         <section id="jobs" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-12 sm:px-6">

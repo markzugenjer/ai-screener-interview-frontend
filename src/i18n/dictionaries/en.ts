@@ -45,6 +45,18 @@ const en = {
   },
   landing: {
     headline: "Your first interview, whenever you're ready.",
+    headlineStart: "Your first interview,",
+    headlineAccent: "whenever you're ready.",
+    eyebrow: "AI screening in Bahasa Indonesia",
+    perks: [
+      { value: "~20 min", label: "Voice interview" },
+      { value: "Instant", label: "Feedback after" },
+      { value: "100%", label: "Reviewed by people" },
+    ],
+    demoRole: "Junior Frontend Developer",
+    demoScore: "Communication",
+    demoReady: "Feedback ready",
+    demoEncrypted: "Encrypted & private",
     lead: "Talk with Nara, our AI interviewer, in Bahasa Indonesia. About 20 minutes from wherever you are, with feedback as soon as you finish.",
     ctaRegister: "Create an account",
     ctaDashboard: "Go to my dashboard",
