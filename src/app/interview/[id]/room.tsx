@@ -38,7 +38,7 @@ export function InterviewRoom({ interview: initial, firstName }: { interview: In
     router.replace(`/interview/${interview.id}/feedback`);
   }, [interview.id, room, router]);
 
-  // If Nara ends the call (all questions done or time is up), the room closes: go to feedback.
+  // If Dicy ends the call (all questions done or time is up), the room closes: go to feedback.
   useEffect(() => {
     const onDisconnected = () => {
       if (!endingRef.current && phase === "live") void finish();

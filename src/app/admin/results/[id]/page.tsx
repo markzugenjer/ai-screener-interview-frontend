@@ -166,7 +166,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
                 {d.transcript.map((tr) => (
                   <p key={tr.seq} className="leading-relaxed">
                     <span className={cn("mr-2 text-sm font-bold", tr.speaker === "ai" ? "text-blush-600" : "text-sage-600")}>
-                      {tr.speaker === "ai" ? "Nara" : a.candidate}
+                      {tr.speaker === "ai" ? "Dicy" : a.candidate}
                     </span>
                     <span className="tabular mr-2 text-xs text-ink-faint">{formatDuration(Math.floor(tr.startMs / 1000))}</span>
                     {tr.text}

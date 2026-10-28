@@ -17,7 +17,7 @@ const lines = [
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/** A looping preview of the interview room: live subtitles, pink for Nara, green for you. */
+/** A looping preview of the interview room: live subtitles, pink for Dicy, green for you. */
 export function HeroDemo() {
   const { t } = useI18n();
   const reduce = useReducedMotion();
@@ -57,7 +57,7 @@ export function HeroDemo() {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <Tile label="Nara" sub={t.landing.demoAi} active={aiTalking} tone="blush" />
+          <Tile label="Dicy" sub={t.landing.demoAi} active={aiTalking} tone="blush" />
           <Tile label="Budi" sub={t.landing.demoYou} active={!aiTalking} tone="sage" />
         </div>
 
@@ -72,7 +72,7 @@ export function HeroDemo() {
               className="text-[0.9375rem] leading-relaxed"
             >
               <span className={cn("mr-1.5 font-bold", aiTalking ? "text-blush-600" : "text-sage-600")}>
-                {aiTalking ? "Nara" : t.landing.demoYou}
+                {aiTalking ? "Dicy" : t.landing.demoYou}
               </span>
               <span className="text-ink">{line.text}</span>
             </motion.p>

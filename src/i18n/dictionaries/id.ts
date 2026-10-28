@@ -4,7 +4,7 @@ import type { Dictionary } from "./en";
 
 const id: Dictionary = {
   meta: {
-    title: "Nara — Wawancara screening dengan AI",
+    title: "FDC Dental Clinic — Wawancara screening dengan AI",
     description:
       "Lamar posisi dan ikuti wawancara pertamamu lewat suara, dalam Bahasa Indonesia, kapan pun kamu siap. Dapatkan feedback langsung setelahnya.",
     dashboard: "Dasbor",
@@ -41,7 +41,7 @@ const id: Dictionary = {
   },
   footer: {
     privacy: "Nomor WhatsApp dan CV kamu dienkripsi. Semua keputusan rekrutmen dibuat oleh rekruter.",
-    rights: "Nara AI Screening",
+    rights: "FDC Dental Clinic",
   },
   landing: {
     headline: "Wawancara pertamamu, kapan pun kamu siap.",
@@ -57,7 +57,7 @@ const id: Dictionary = {
     demoScore: "Komunikasi",
     demoReady: "Feedback siap",
     demoEncrypted: "Terenkripsi & privat",
-    lead: "Ngobrol dengan Nara, pewawancara AI kami, dalam Bahasa Indonesia. Sekitar 20 menit dari mana saja, dan feedback langsung muncul begitu selesai.",
+    lead: "Ngobrol dengan Dicy, pewawancara AI kami, dalam Bahasa Indonesia. Sekitar 20 menit dari mana saja, dan feedback langsung muncul begitu selesai.",
     ctaRegister: "Buat akun",
     ctaDashboard: "Buka dasborku",
     ctaRoles: "Lihat lowongan",
@@ -70,7 +70,7 @@ const id: Dictionary = {
     howTitle: "Cara kerjanya",
     steps: [
       { title: "Buat akunmu", body: "Isi nama, nomor WhatsApp, dan unggah CV. Hanya sekitar dua menit." },
-      { title: "Ngobrol dengan Nara", body: "Wawancara suara 15–20 menit dalam Bahasa Indonesia. Pakai ruangan yang tenang dan headphone kalau ada." },
+      { title: "Ngobrol dengan Dicy", body: "Wawancara suara 15–20 menit dalam Bahasa Indonesia. Pakai ruangan yang tenang dan headphone kalau ada." },
       { title: "Baca feedbackmu", body: "Lihat skor, apa yang sudah bagus, dan apa yang perlu dilatih. Setiap hasil direview oleh rekruter." },
     ],
     demoLabel: "Contoh wawancara yang sedang berlangsung",
@@ -78,7 +78,7 @@ const id: Dictionary = {
     demoYou: "Kamu",
   },
   auth: {
-    sideTitle: "Jawab dengan kata-katamu sendiri. Nara mendengarkan, rekruter yang memutuskan.",
+    sideTitle: "Jawab dengan kata-katamu sendiri. Dicy mendengarkan, rekruter yang memutuskan.",
     sideBody: "AI hanya melakukan screening. Setiap hasil direview oleh manusia sebelum ada yang diundang atau ditolak.",
     registerTitle: "Buat akunmu",
     registerLead: "Akun ini dipakai untuk memulai wawancara dan melihat feedback.",
@@ -178,7 +178,7 @@ const id: Dictionary = {
     lookingFor: "Yang kami cari",
     beforeStart: "Sebelum mulai",
     checklist: [
-      "Cari ruangan yang tenang. Headphone membantu Nara mendengarmu dengan jelas.",
+      "Cari ruangan yang tenang. Headphone membantu Dicy mendengarmu dengan jelas.",
       "Izinkan akses mikrofon saat browser meminta.",
       "Jawab dalam Bahasa Indonesia. Istilah teknis bahasa Inggris tidak masalah.",
       "Ambil waktu sejenak untuk berpikir sebelum menjawab — jeda itu wajar.",
@@ -194,7 +194,7 @@ const id: Dictionary = {
   },
   room: {
     readyTitle: "Siap untuk wawancara {title}?",
-    readyBody: "Sekitar {n} menit bersama Nara, dalam Bahasa Indonesia. Ucapkan sesuatu untuk mengecek mikrofonmu.",
+    readyBody: "Sekitar {n} menit bersama Dicy, dalam Bahasa Indonesia. Ucapkan sesuatu untuk mengecek mikrofonmu.",
     practice: " Ini percobaan latihan.",
     micAsking: "Menunggu izin mikrofon…",
     micHeard: "Suaramu terdengar",
@@ -224,7 +224,7 @@ const id: Dictionary = {
     muted: "Dibisukan",
     subtitles: "Subtitle langsung",
     subtitlesEmpty: "Subtitle akan muncul di sini saat kalian berbicara.",
-    naraJoining: "Nara sedang bergabung…",
+    aiJoining: "Dicy sedang bergabung…",
     mute: "Bisukan",
     unmute: "Aktifkan mik",
     reset: "Ulang wawancara",
@@ -236,8 +236,8 @@ const id: Dictionary = {
     leaveBody: "Jawabanmu sejauh ini akan dinilai. Kamu tidak bisa melanjutkan wawancara ini.",
     resetTitle: "Mulai dari awal?",
     resetConfirm: "Ulang wawancara",
-    resetBody: "Semua percakapan sejauh ini dihapus dan Nara mulai lagi. Ini hanya bisa dilakukan sekali.",
-    tapToHear: "Ketuk untuk mendengar Nara",
+    resetBody: "Semua percakapan sejauh ini dihapus dan Dicy mulai lagi. Ini hanya bisa dilakukan sekali.",
+    tapToHear: "Ketuk untuk mendengar Dicy",
   },
   feedback: {
     title: "Feedback wawancaramu",
@@ -255,7 +255,7 @@ const id: Dictionary = {
     disclaimerPractice: " Ini percobaan latihan, jadi tidak menggantikan hasil pertamamu.",
     noAnswersTitle: "Tidak ada jawaban yang terekam",
     noAnswersBody:
-      "Wawancara berakhir sebelum Nara mendengar jawaban, jadi belum ada yang bisa dinilai. Kamu bisa mulai lagi kapan pun kamu siap.",
+      "Wawancara berakhir sebelum Dicy mendengar jawaban, jadi belum ada yang bisa dinilai. Kamu bisa mulai lagi kapan pun kamu siap.",
     scoring: "Menilai jawabanmu",
     scoringSlow: "Penilaian memakan waktu lebih lama dari biasanya",
     scoringBody: "Biasanya butuh satu atau dua menit. Halaman ini akan diperbarui otomatis, atau kamu bisa kembali nanti lewat dasbor.",
@@ -421,7 +421,7 @@ const id: Dictionary = {
     weightsSum: "Total bobot harus 100 (sekarang {n}).",
     bank: "Bank pertanyaan",
     bankLead:
-      "Tulis pertanyaan dalam Bahasa Indonesia. Nara memilih dari sini dan menyesuaikan tingkat kesulitan untuk tiap kandidat. Poin jawaban yang diharapkan tidak pernah dibacakan.",
+      "Tulis pertanyaan dalam Bahasa Indonesia. Dicy memilih dari sini dan menyesuaikan tingkat kesulitan untuk tiap kandidat. Poin jawaban yang diharapkan tidak pernah dibacakan.",
     addQuestion: "Tambah pertanyaan",
     skill: "Keahlian",
     skillPlaceholder: "Keahlian, mis. React",

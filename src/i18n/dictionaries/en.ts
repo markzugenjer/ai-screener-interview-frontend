@@ -4,7 +4,7 @@
 
 const en = {
   meta: {
-    title: "Nara — AI screening interviews",
+    title: "FDC Dental Clinic — AI screening interviews",
     description:
       "Apply for a role and do your first interview by voice, in Bahasa Indonesia, whenever it suits you. Get feedback right after.",
     dashboard: "Dashboard",
@@ -41,7 +41,7 @@ const en = {
   },
   footer: {
     privacy: "Your WhatsApp number and resume are encrypted. Recruiters make every hiring decision.",
-    rights: "Nara AI Screening",
+    rights: "FDC Dental Clinic",
   },
   landing: {
     headline: "Your first interview, whenever you're ready.",
@@ -57,7 +57,7 @@ const en = {
     demoScore: "Communication",
     demoReady: "Feedback ready",
     demoEncrypted: "Encrypted & private",
-    lead: "Talk with Nara, our AI interviewer, in Bahasa Indonesia. About 20 minutes from wherever you are, with feedback as soon as you finish.",
+    lead: "Talk with Dicy, our AI interviewer, in Bahasa Indonesia. About 20 minutes from wherever you are, with feedback as soon as you finish.",
     ctaRegister: "Create an account",
     ctaDashboard: "Go to my dashboard",
     ctaRoles: "See open roles",
@@ -70,7 +70,7 @@ const en = {
     howTitle: "How it works",
     steps: [
       { title: "Create your account", body: "Add your name, WhatsApp number and resume. It takes about two minutes." },
-      { title: "Talk with Nara", body: "A 15–20 minute voice interview in Bahasa Indonesia. Use a quiet room and headphones if you have them." },
+      { title: "Talk with Dicy", body: "A 15–20 minute voice interview in Bahasa Indonesia. Use a quiet room and headphones if you have them." },
       { title: "Read your feedback", body: "See your scores, what went well and what to practise. A recruiter reviews every result." },
     ],
     demoLabel: "Preview of an interview in progress",
@@ -78,7 +78,7 @@ const en = {
     demoYou: "You",
   },
   auth: {
-    sideTitle: "Answer in your own words. Nara listens, then a recruiter decides.",
+    sideTitle: "Answer in your own words. Dicy listens, then a recruiter decides.",
     sideBody: "The AI only screens. Every result is reviewed by a person before anyone is invited or turned down.",
     registerTitle: "Create your account",
     registerLead: "You'll use it to start interviews and see your feedback.",
@@ -178,7 +178,7 @@ const en = {
     lookingFor: "What we're looking for",
     beforeStart: "Before you start",
     checklist: [
-      "Find a quiet room. Headphones help Nara hear you clearly.",
+      "Find a quiet room. Headphones help Dicy hear you clearly.",
       "Allow microphone access when your browser asks.",
       "Answer in Bahasa Indonesia. English technical terms are fine.",
       "Take a moment to think before answering — pauses are okay.",
@@ -194,7 +194,7 @@ const en = {
   },
   room: {
     readyTitle: "Ready for your {title} interview?",
-    readyBody: "About {n} minutes with Nara, in Bahasa Indonesia. Say something to check your microphone.",
+    readyBody: "About {n} minutes with Dicy, in Bahasa Indonesia. Say something to check your microphone.",
     practice: " This is a practice attempt.",
     micAsking: "Waiting for microphone permission…",
     micHeard: "We can hear you",
@@ -224,7 +224,7 @@ const en = {
     muted: "Muted",
     subtitles: "Live subtitles",
     subtitlesEmpty: "Subtitles will appear here as you talk.",
-    naraJoining: "Nara is joining the call…",
+    aiJoining: "Dicy is joining the call…",
     mute: "Mute",
     unmute: "Unmute",
     reset: "Reset interview",
@@ -236,8 +236,8 @@ const en = {
     leaveBody: "Your answers so far will be scored. You won't be able to continue this interview.",
     resetTitle: "Start over?",
     resetConfirm: "Reset interview",
-    resetBody: "Everything said so far is cleared and Nara starts again. You can only do this once.",
-    tapToHear: "Tap to hear Nara",
+    resetBody: "Everything said so far is cleared and Dicy starts again. You can only do this once.",
+    tapToHear: "Tap to hear Dicy",
   },
   feedback: {
     title: "Feedback on your interview",
@@ -255,7 +255,7 @@ const en = {
     disclaimerPractice: " This was a practice attempt, so it doesn't replace your first result.",
     noAnswersTitle: "No answers were recorded",
     noAnswersBody:
-      "The interview ended before Nara heard any answers, so there's nothing to score. You can start again whenever you're ready.",
+      "The interview ended before Dicy heard any answers, so there's nothing to score. You can start again whenever you're ready.",
     scoring: "Scoring your answers",
     scoringSlow: "Scoring is taking longer than usual",
     scoringBody: "This usually takes a minute or two. This page updates by itself, or you can come back later from your dashboard.",
@@ -421,7 +421,7 @@ const en = {
     weightsSum: "Weights must add up to 100 (now {n}).",
     bank: "Question bank",
     bankLead:
-      "Write questions in Bahasa Indonesia. Nara picks from these, adapting difficulty to each candidate. Expected points are never read aloud.",
+      "Write questions in Bahasa Indonesia. Dicy picks from these, adapting difficulty to each candidate. Expected points are never read aloud.",
     addQuestion: "Add question",
     skill: "Skill",
     skillPlaceholder: "Skill, e.g. React",

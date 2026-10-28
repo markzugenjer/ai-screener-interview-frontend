@@ -15,7 +15,9 @@ export function Brand({ href = "/" }: { href?: string }) {
   return (
     <Link href={href} className="inline-flex items-center gap-2.5 rounded-lg font-bold tracking-tight text-ink">
       <BrandMark />
-      <span className="text-[1.0625rem]">Nara</span>
+      <span className="text-[1.0625rem]">
+        FDC<span className="hidden sm:inline"> Dental Clinic</span>
+      </span>
     </Link>
   );
 }

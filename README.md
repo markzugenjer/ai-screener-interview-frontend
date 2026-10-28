@@ -1,6 +1,6 @@
 # AI Screener Interview — Frontend
 
-Next.js app for **Nara**, the AI screening interviewer: job board, candidate accounts, the live voice
+Next.js app for **Dicy**, the AI screening interviewer at **FDC Dental Clinic**: job board, candidate accounts, the live voice
 interview room, feedback pages, and the recruiter area.
 
 Backend: [ai-screener-interview-backend](https://github.com/markzugenjer/ai-screener-interview-backend)
@@ -25,7 +25,7 @@ Production: `pnpm build && pnpm start`. On Vercel, set `API_INTERNAL_URL` to you
 | `/register`, `/login` | Guests | Account with full name, email, password, WhatsApp and resume |
 | `/dashboard` | Candidates | Past interviews (cards with score and summary) and open roles |
 | `/jobs/[slug]` | Candidates | Role details, interview checklist, start button |
-| `/interview/[id]` | Candidates | Mic check, then the call: Nara and you, live subtitles, mute, reset, leave |
+| `/interview/[id]` | Candidates | Mic check, then the call: Dicy and you, live subtitles, mute, reset, leave |
 | `/interview/[id]/feedback` | Candidates | Score, breakdown, strengths, tips, screening disclaimer, retake |
 | `/admin` | Recruiters | Overview and highest-scoring candidates waiting for review |
 | `/admin/results` | Recruiters | Filterable, shareable (URL-based) results table |
@@ -34,7 +34,7 @@ Production: `pnpm build && pnpm start`. On Vercel, set `API_INTERNAL_URL` to you
 
 ## Design
 
-White, soft green and soft pink, with one rule: **pink is always Nara (the AI), green is always you**, in the call
+White, soft green and soft pink, with one rule: **pink is always Dicy (the AI), green is always you**, in the call
 tiles, the subtitles and the brand mark. Type is Plus Jakarta Sans, designed in Jakarta. Motion is reserved for the
 voice orbs (they react to real audio volume) and the landing-page preview; `prefers-reduced-motion` is respected.
 

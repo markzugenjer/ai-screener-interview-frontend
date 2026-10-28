@@ -44,7 +44,7 @@ export function CallStage({
 
   useIntegritySignals(interview.id);
 
-  // Subtitles: the latest two lines, pink for Nara, green for you.
+  // Subtitles: the latest two lines, pink for Dicy, green for you.
   const lines = useMemo(
     () =>
       transcriptions
@@ -89,7 +89,7 @@ export function CallStage({
         <Tile
           delay={0}
           tone="blush"
-          name="Nara"
+          name="Dicy"
           role={t.room.aiRole}
           status={agent ? agentStateText[agentState] ?? t.room.listening : t.room.joining}
           active={agentSpeaking}
@@ -110,7 +110,7 @@ export function CallStage({
 
       <section aria-label={t.room.subtitles} aria-live="polite" className="mt-4 min-h-[6.5rem] rounded-card border border-line bg-paper px-5 py-4">
         {lines.length === 0 ? (
-          <p className="text-ink-faint">{agent ? t.room.subtitlesEmpty : t.room.naraJoining}</p>
+          <p className="text-ink-faint">{agent ? t.room.subtitlesEmpty : t.room.aiJoining}</p>
         ) : (
           <div className="space-y-1.5">
             <AnimatePresence initial={false} mode="popLayout">
@@ -124,7 +124,7 @@ export function CallStage({
                   transition={{ duration: 0.25, ease: "easeOut" }}
                   className={cn("leading-relaxed", i === lines.length - 1 ? "text-[1.0625rem] text-ink" : "text-sm text-ink-faint")}
                 >
-                  <span className={cn("mr-2 font-bold", l.mine ? "text-sage-600" : "text-blush-600")}>{l.mine ? t.room.you : "Nara"}</span>
+                  <span className={cn("mr-2 font-bold", l.mine ? "text-sage-600" : "text-blush-600")}>{l.mine ? t.room.you : "Dicy"}</span>
                   {l.text}
                 </motion.p>
               ))}
