@@ -7,7 +7,8 @@ const GUEST_ONLY = ["/login", "/register"];
 function contentSecurityPolicy(nonce: string): string {
   const isDev = process.env.NODE_ENV === "development";
   // LiveKit signaling runs over secure WebSockets to the LiveKit Cloud project.
-  const livekit = process.env.NEXT_PUBLIC_LIVEKIT_HOST ?? "*.livekit.cloud";
+  // Read at runtime (LIVEKIT_HOST); NEXT_PUBLIC_* would be frozen at build time.
+  const livekit = process.env.LIVEKIT_HOST || process.env.NEXT_PUBLIC_LIVEKIT_HOST || "*.livekit.cloud";
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,

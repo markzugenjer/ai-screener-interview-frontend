@@ -10,17 +10,28 @@ import { api } from "@/lib/api-client";
 import { errorMessage } from "@/lib/errors";
 import type { Interview } from "@/lib/types";
 
-/** Re-renders the page every few seconds until the score arrives (stops after 5 minutes). */
-export function RefreshWhilePending() {
+/**
+ * While the score is pending: asks the API to score now (on hosts without a
+ * background worker the scoring runs inside that request), and re-renders the
+ * page every few seconds until the score arrives (stops after 5 minutes).
+ */
+export function RefreshWhilePending({ interviewId }: { interviewId: string }) {
   const router = useRouter();
   useEffect(() => {
+    let active = true;
+    api("POST", `/interviews/${encodeURIComponent(interviewId)}/score`)
+      .catch(() => {})
+      .finally(() => active && router.refresh());
     const started = Date.now();
     const timer = setInterval(() => {
       if (Date.now() - started > 5 * 60_000) clearInterval(timer);
       else router.refresh();
     }, 4000);
-    return () => clearInterval(timer);
-  }, [router]);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, [interviewId, router]);
   return null;
 }
 

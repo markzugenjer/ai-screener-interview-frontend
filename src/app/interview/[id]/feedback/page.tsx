@@ -185,7 +185,7 @@ function Pending({ interview, t }: { interview: Interview; t: Dictionary }) {
           <span aria-hidden className="mx-auto block size-10 animate-spin rounded-full border-4 border-sage-100 border-t-sage-500" />
           <p className="mt-5 text-lg font-bold">{interview.status === "failed" ? t.feedback.scoringSlow : t.feedback.scoring}</p>
           <p className="mx-auto mt-2 max-w-md leading-relaxed text-ink-soft">{t.feedback.scoringBody}</p>
-          <RefreshWhilePending />
+          <RefreshWhilePending interviewId={interview.id} />
         </>
       )}
       <Disclaimer practice={interview.isPractice} t={t} />

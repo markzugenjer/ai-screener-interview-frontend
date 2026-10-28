@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const apiUrl = (process.env.API_INTERNAL_URL ?? "http://localhost:8080").replace(/\/$/, "");
-
 // Headers for every response. The Content-Security-Policy is set per request
 // in src/proxy.ts because it carries a fresh nonce.
 const securityHeaders = [
@@ -27,12 +25,8 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  // The browser only ever talks to this origin. /api/v1/* is forwarded to the Go
-  // API, so session cookies stay first-party and no CORS is needed.
-  // /internal/* on the API is deliberately NOT forwarded.
-  async rewrites() {
-    return [{ source: "/api/v1/:path*", destination: `${apiUrl}/api/v1/:path*` }];
-  },
+  // /api/v1/* is forwarded to the Go API by src/app/api/v1/[...path]/route.ts,
+  // which reads API_INTERNAL_URL at runtime (a rewrite here would be fixed at build).
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
