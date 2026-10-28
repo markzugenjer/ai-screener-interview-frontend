@@ -29,11 +29,24 @@ const item: Variants = {
   show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease } },
 };
 
-/** A grid or list whose children cascade in when it scrolls into view. */
+/**
+ * A grid or list whose children cascade in when it scrolls into view.
+ * The "show" state is set with `animate` (not `whileInView`) so items that mount
+ * later — after a language switch or a refresh with new data — animate in too
+ * instead of staying hidden.
+ */
 export function Stagger({ children, className, as = "div" }: { children: React.ReactNode; className?: string; as?: "div" | "ul" | "ol" }) {
-  const Comp = as === "ul" ? motion.ul : as === "ol" ? motion.ol : motion.div;
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const Comp = (as === "ul" ? motion.ul : as === "ol" ? motion.ol : motion.div) as typeof motion.div;
   return (
-    <Comp className={className} variants={container} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-40px" }}>
+    <Comp
+      ref={ref as React.RefObject<HTMLDivElement>}
+      className={className}
+      variants={container}
+      initial="hidden"
+      animate={inView ? "show" : "hidden"}
+    >
       {children}
     </Comp>
   );

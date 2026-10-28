@@ -51,7 +51,7 @@ const en = {
     perks: [
       { value: "~20 min", label: "Voice interview" },
       { value: "Instant", label: "Feedback after" },
-      { value: "100%", label: "Reviewed by people" },
+      { value: "24/7", label: "Interview anytime" },
     ],
     demoRole: "Junior Frontend Developer",
     demoScore: "Communication",

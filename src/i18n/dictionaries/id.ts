@@ -51,7 +51,7 @@ const id: Dictionary = {
     perks: [
       { value: "~20 mnt", label: "Wawancara suara" },
       { value: "Instan", label: "Feedback langsung" },
-      { value: "100%", label: "Direview rekruter" },
+      { value: "24/7", label: "Bisa kapan saja" },
     ],
     demoRole: "Junior Frontend Developer",
     demoScore: "Komunikasi",
