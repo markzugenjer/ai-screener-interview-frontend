@@ -1,15 +1,18 @@
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/lib/format";
 
-type Variant = "primary" | "secondary" | "ghost" | "danger";
+type Variant = "primary" | "secondary" | "ghost" | "ghostDanger" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
   primary: "bg-ink text-paper hover:bg-sage-700 disabled:bg-ink/40",
   secondary: "bg-sage-100 text-sage-700 hover:bg-sage-200 disabled:opacity-50",
   ghost: "text-ink-soft hover:bg-mist hover:text-ink disabled:opacity-50",
+  // Quiet until hovered, then soft red: for actions like log out.
+  ghostDanger: "text-ink-soft hover:bg-danger-soft hover:text-danger disabled:opacity-50",
   danger: "bg-danger-soft text-danger hover:bg-blush-100 disabled:opacity-50",
 };
 const sizes: Record<Size, string> = {
@@ -154,5 +157,18 @@ export function EmptyState({ title, children, action }: { title: string; childre
       {children && <div className="mx-auto mt-1.5 max-w-md text-sm text-ink-soft">{children}</div>}
       {action && <div className="mt-5">{action}</div>}
     </div>
+  );
+}
+
+/** "← Back" link above a page title; the arrow nudges left on hover. */
+export function BackLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group inline-flex items-center gap-2 rounded-full py-1 pr-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink"
+    >
+      <ArrowLeft className="size-4 transition-transform duration-200 group-hover:-translate-x-0.5" aria-hidden />
+      {children}
+    </Link>
   );
 }

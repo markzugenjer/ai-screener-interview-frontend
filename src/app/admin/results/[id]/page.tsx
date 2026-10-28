@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 import { DecisionBadge, RecommendationBadge, StatusBadge } from "@/components/admin-bits";
 import { CountUp, GrowBar, Reveal } from "@/components/motion";
-import { Alert, Badge } from "@/components/ui";
+import { Alert, Badge, BackLink } from "@/components/ui";
 import type { Dictionary } from "@/i18n/config";
 import { fmt, formatDateTime } from "@/i18n/format";
 import { getI18n } from "@/i18n/server";
@@ -39,9 +39,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
 
   return (
     <>
-      <Link href="/admin/results" className="text-sm font-medium text-ink-soft hover:text-ink">
-        {a.allCandidates}
-      </Link>
+      <BackLink href="/admin/results">{a.allCandidates}</BackLink>
       <Reveal className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-[1.75rem] font-extrabold">{candidate.fullName}</h1>

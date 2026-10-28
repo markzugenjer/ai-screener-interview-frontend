@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BackLink } from "@/components/ui";
+
 import { PageTitle } from "@/components/admin-bits";
 import { getI18n } from "@/i18n/server";
 import { JobForm } from "../job-form";
@@ -14,9 +16,7 @@ export default async function NewJobPage() {
   const { t } = await getI18n();
   return (
     <>
-      <Link href="/admin/jobs" className="text-sm font-medium text-ink-soft hover:text-ink">
-        {t.admin.backToJobs}
-      </Link>
+      <BackLink href="/admin/jobs">{t.admin.backToJobs}</BackLink>
       <div className="mt-4">
         <PageTitle title={t.admin.newJob}>{t.admin.newJobLead}</PageTitle>
       </div>

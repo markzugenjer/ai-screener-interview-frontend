@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+
+import { BackLink } from "@/components/ui";
 import { notFound } from "next/navigation";
 
 import { PageTitle } from "@/components/admin-bits";
@@ -25,9 +27,7 @@ export default async function EditJobPage({ params }: { params: Promise<{ id: st
   const [user, { t }] = await Promise.all([currentUser(), getI18n()]);
   return (
     <>
-      <Link href="/admin/jobs" className="text-sm font-medium text-ink-soft hover:text-ink">
-        {t.admin.backToJobs}
-      </Link>
+      <BackLink href="/admin/jobs">{t.admin.backToJobs}</BackLink>
       <div className="mt-4">
         <PageTitle title={data.job.title}>
           {data.job.status === "open" ? (

@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { Badge } from "@/components/ui";
+import { Badge, BackLink } from "@/components/ui";
 import { fmt } from "@/i18n/format";
 import { getI18n } from "@/i18n/server";
 import { ApiError, apiServer, requireUser } from "@/lib/api-server";
@@ -47,9 +47,7 @@ export default async function JobPage({ params }: Props) {
       <SiteHeader user={user} />
       <main className="mx-auto grid max-w-6xl gap-10 px-4 pt-10 sm:px-6 lg:grid-cols-[1fr_22rem]">
         <article>
-          <Link href="/dashboard#jobs" className="text-sm font-medium text-ink-soft hover:text-ink">
-            {t.job.allRoles}
-          </Link>
+          <BackLink href="/dashboard#jobs">{t.job.allRoles}</BackLink>
           <Reveal>
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <Badge tone="sage">{job.category}</Badge>

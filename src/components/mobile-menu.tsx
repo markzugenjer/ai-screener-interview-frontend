@@ -100,7 +100,7 @@ export function MobileMenu({ name, email, links }: Props) {
                 role="menuitem"
                 onClick={logout}
                 disabled={busy}
-                className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-blush-700 transition-colors hover:bg-blush-50 disabled:opacity-60"
+                className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-danger transition-colors hover:bg-danger-soft disabled:opacity-60"
               >
                 {busy ? <Spinner /> : <LogOut className="size-4" aria-hidden />}
                 {t.nav.logout}

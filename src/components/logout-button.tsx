@@ -25,7 +25,7 @@ export function LogoutButton() {
   const { t } = useI18n();
   const { busy, logout } = useLogout();
   return (
-    <Button variant="ghost" size="sm" loading={busy} onClick={logout}>
+    <Button variant="ghostDanger" size="sm" loading={busy} onClick={logout}>
       {!busy && <LogOut className="size-4" aria-hidden />}
       {t.nav.logout}
     </Button>
