@@ -233,8 +233,9 @@ function Tile({
         </span>
       </div>
       <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-2">
-        <p className="text-sm">
-          <span className="font-bold text-ink">{name}</span> <span className="text-ink-faint">{role}</span>
+        <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
+          <span className="font-bold text-ink">{name}</span>
+          <span className="text-ink-faint">{role}</span>
         </p>
         <span className={cn("rounded-full bg-paper/80 px-2.5 py-1 text-xs font-semibold", pink ? "text-blush-700" : "text-sage-700")}>
           {status}

@@ -191,8 +191,9 @@ function Tile({ label, sub, active, tone }: { label: string; sub: string; active
         </span>
       </div>
       <Wave active={active} tone={tone} />
-      <div className="absolute bottom-2.5 left-3 text-xs">
-        <span className="font-semibold text-ink">{label}</span> <span className="text-ink-faint">{sub}</span>
+      <div className="absolute bottom-2.5 left-3 flex items-baseline gap-1.5 text-xs">
+        <span className="font-semibold text-ink">{label}</span>
+        <span className="text-ink-faint">{sub}</span>
       </div>
     </div>
   );
