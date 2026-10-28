@@ -34,8 +34,11 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const { locale } = await getI18n();
   return (
-    <html lang={locale} className={jakarta.variable}>
-      <body className="min-h-dvh font-sans">
+    // suppressHydrationWarning: browser extensions (e.g. ColorZilla, Grammarly) add
+    // attributes to <html>/<body> before React loads. This only ignores attribute
+    // differences on these two tags; mismatches inside the page are still reported.
+    <html lang={locale} className={jakarta.variable} suppressHydrationWarning>
+      <body className="min-h-dvh font-sans" suppressHydrationWarning>
         <AppProviders locale={locale}>{children}</AppProviders>
       </body>
     </html>
