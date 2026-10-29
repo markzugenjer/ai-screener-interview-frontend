@@ -1,3 +1,5 @@
+import type { Locale } from "@/i18n/config";
+
 // Shapes returned by the Go API (see backend internal/api/dto.go).
 
 export type Role = "candidate" | "recruiter" | "admin";
@@ -41,6 +43,22 @@ export interface Job {
   weights?: Weights;
   createdAt: string;
   updatedAt: string;
+  /** Language of the text fields above. */
+  lang: Locale;
+  /** Job editor only: the original language and the other language's text. */
+  sourceLang?: Locale;
+  translations?: Partial<Record<Locale, JobText>>;
+}
+
+/** A job's public text in one language (the question bank stays in Bahasa Indonesia). */
+export interface JobText {
+  title: string;
+  division: string;
+  category: string;
+  location: string;
+  employmentType: string;
+  description: string;
+  requirements: string[];
 }
 
 export interface Question {

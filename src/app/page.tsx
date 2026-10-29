@@ -6,13 +6,13 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { buttonClass, EmptyState, LinkButton } from "@/components/ui";
-import { getI18n } from "@/i18n/server";
+import { getI18n, getLocale } from "@/i18n/server";
 import { apiServer, currentUser } from "@/lib/api-server";
 import type { Job } from "@/lib/types";
 
 async function openJobs(): Promise<Job[] | null> {
   try {
-    return (await apiServer<{ jobs: Job[] }>("/api/v1/jobs")).jobs;
+    return (await apiServer<{ jobs: Job[] }>(`/api/v1/jobs?lang=${await getLocale()}`)).jobs;
   } catch {
     return null;
   }

@@ -15,8 +15,14 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.meta.editJob };
 }
 
-export default async function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function EditJobPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ created?: string }>;
+}) {
+  const [{ id }, { created }] = await Promise.all([params, searchParams]);
   let data: { job: Job; questions: Question[] };
   try {
     data = await apiServer(`/api/v1/admin/jobs/${encodeURIComponent(id)}`);
@@ -39,7 +45,12 @@ export default async function EditJobPage({ params }: { params: Promise<{ id: st
           )}
         </PageTitle>
       </div>
-      <JobForm job={data.job} questions={data.questions} canDelete={user?.role === "admin"} />
+      <JobForm
+        job={data.job}
+        questions={data.questions}
+        canDelete={user?.role === "admin"}
+        createdNotice={created === "translated" || created === "missing" ? created : undefined}
+      />
     </>
   );
 }

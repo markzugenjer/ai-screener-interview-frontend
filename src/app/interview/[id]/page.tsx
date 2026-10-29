@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
-import { getI18n } from "@/i18n/server";
+import { getI18n, getLocale } from "@/i18n/server";
 import { ApiError, apiServer, requireUser } from "@/lib/api-server";
 import type { Interview } from "@/lib/types";
 import { InterviewRoom } from "./room";
@@ -16,7 +16,7 @@ export default async function InterviewPage({ params }: { params: Promise<{ id: 
   const user = await requireUser(`/interview/${id}`);
   let interview: Interview;
   try {
-    interview = (await apiServer<{ interview: Interview }>(`/api/v1/interviews/${encodeURIComponent(id)}`)).interview;
+    interview = (await apiServer<{ interview: Interview }>(`/api/v1/interviews/${encodeURIComponent(id)}?lang=${await getLocale()}`)).interview;
   } catch (err) {
     if (err instanceof ApiError && err.status === 404) notFound();
     throw err;

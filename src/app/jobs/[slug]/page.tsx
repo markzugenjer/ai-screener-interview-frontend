@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Badge, BackLink } from "@/components/ui";
 import { fmt } from "@/i18n/format";
-import { getI18n } from "@/i18n/server";
+import { getI18n, getLocale } from "@/i18n/server";
 import { ApiError, apiServer, requireUser } from "@/lib/api-server";
 import type { Interview, Job } from "@/lib/types";
 import { StartInterviewButton } from "./start-button";
@@ -17,7 +17,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 async function loadJob(slug: string): Promise<Job> {
   try {
-    return (await apiServer<{ job: Job }>(`/api/v1/jobs/${encodeURIComponent(slug)}`)).job;
+    return (await apiServer<{ job: Job }>(`/api/v1/jobs/${encodeURIComponent(slug)}?lang=${await getLocale()}`)).job;
   } catch (err) {
     if (err instanceof ApiError && err.status === 404) notFound();
     throw err;
@@ -36,7 +36,7 @@ export default async function JobPage({ params }: Props) {
   const [{ t }, job, { interviews }] = await Promise.all([
     getI18n(),
     loadJob(slug),
-    apiServer<{ interviews: Interview[] }>("/api/v1/me/interviews"),
+    apiServer<{ interviews: Interview[] }>(`/api/v1/me/interviews?lang=${await getLocale()}`),
   ]);
   const mine = interviews.filter((iv) => iv.jobId === job.id);
   const open = mine.find((iv) => iv.status === "pending" || iv.status === "in_progress");

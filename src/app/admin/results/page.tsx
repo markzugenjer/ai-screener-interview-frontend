@@ -5,7 +5,7 @@ import { DecisionBadge, PageTitle, RecommendationBadge, ScoreBar, StatusBadge } 
 import { Reveal } from "@/components/motion";
 import { Badge, EmptyState, buttonClass } from "@/components/ui";
 import { fmt, formatDate } from "@/i18n/format";
-import { getI18n } from "@/i18n/server";
+import { getI18n, getLocale } from "@/i18n/server";
 import { apiServer } from "@/lib/api-server";
 import type { Job, ResultRow } from "@/lib/types";
 import { ResultFilters } from "./filters";
@@ -25,12 +25,13 @@ export default async function ResultsPage({ searchParams }: { searchParams: Prom
     if (typeof v === "string" && v) qs.set(k, v);
   }
   qs.set("pageSize", "20");
+  const locale = await getLocale();
   const page = Math.max(1, Number(sp.page) || 1);
 
-  const [{ t, locale }, { jobs }, data] = await Promise.all([
+  const [{ t }, { jobs }, data] = await Promise.all([
     getI18n(),
-    apiServer<{ jobs: Job[] }>("/api/v1/admin/jobs"),
-    apiServer<{ results: ResultRow[]; total: number; pageSize: number }>(`/api/v1/admin/results?${qs.toString()}`),
+    apiServer<{ jobs: Job[] }>(`/api/v1/admin/jobs?lang=${locale}`),
+    apiServer<{ results: ResultRow[]; total: number; pageSize: number }>(`/api/v1/admin/results?${qs.toString()}&lang=${locale}`),
   ]);
   const a = t.admin;
   const pages = Math.max(1, Math.ceil(data.total / data.pageSize));

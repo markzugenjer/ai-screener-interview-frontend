@@ -6,7 +6,7 @@ import { PageTitle } from "@/components/admin-bits";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Badge, EmptyState, LinkButton } from "@/components/ui";
 import { fmt, formatDate } from "@/i18n/format";
-import { getI18n } from "@/i18n/server";
+import { getI18n, getLocale } from "@/i18n/server";
 import { apiServer } from "@/lib/api-server";
 import type { Job } from "@/lib/types";
 
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const statusTone = { open: "sage", draft: "neutral", closed: "blush" } as const;
 
 export default async function JobsPage() {
-  const [{ t, locale }, { jobs }] = await Promise.all([getI18n(), apiServer<{ jobs: Job[] }>("/api/v1/admin/jobs")]);
+  const [{ t, locale }, { jobs }] = await Promise.all([getI18n(), apiServer<{ jobs: Job[] }>(`/api/v1/admin/jobs?lang=${await getLocale()}`)]);
   const a = t.admin;
   return (
     <>

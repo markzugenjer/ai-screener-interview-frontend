@@ -5,7 +5,7 @@ import { PageTitle, RecommendationBadge, ScoreBar } from "@/components/admin-bit
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { EmptyState, LinkButton } from "@/components/ui";
 import { fmt, formatDate } from "@/i18n/format";
-import { getI18n } from "@/i18n/server";
+import { getI18n, getLocale } from "@/i18n/server";
 import { apiServer } from "@/lib/api-server";
 import type { ResultRow, Stats } from "@/lib/types";
 
@@ -15,10 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AdminOverview() {
-  const [{ t, locale }, { stats }, { results }] = await Promise.all([
+  const locale = await getLocale();
+  const [{ t }, { stats }, { results }] = await Promise.all([
     getI18n(),
     apiServer<{ stats: Stats }>("/api/v1/admin/stats"),
-    apiServer<{ results: ResultRow[] }>("/api/v1/admin/results?status=scored&decision=none&sort=-overall&pageSize=6"),
+    apiServer<{ results: ResultRow[] }>(`/api/v1/admin/results?status=scored&decision=none&sort=-overall&pageSize=6&lang=${locale}`),
   ]);
 
   return (

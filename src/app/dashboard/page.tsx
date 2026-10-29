@@ -20,7 +20,7 @@ export default async function Dashboard() {
   const user = await requireUser("/dashboard");
   const { t, locale } = await getI18n();
   const [{ jobs }, { interviews }] = await Promise.all([
-    apiServer<{ jobs: Job[] }>("/api/v1/jobs"),
+    apiServer<{ jobs: Job[] }>(`/api/v1/jobs?lang=${locale}`),
     apiServer<{ interviews: Interview[] }>(`/api/v1/me/interviews?lang=${locale}`),
   ]);
   const groups = groupByJob(interviews);

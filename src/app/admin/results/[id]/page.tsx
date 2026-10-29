@@ -27,7 +27,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
   const a = t.admin;
   let d: ResultDetail;
   try {
-    d = await apiServer<ResultDetail>(`/api/v1/admin/results/${encodeURIComponent(id)}`);
+    d = await apiServer<ResultDetail>(`/api/v1/admin/results/${encodeURIComponent(id)}?lang=${locale}`);
   } catch (err) {
     if (err instanceof ApiError && err.status === 404) notFound();
     throw err;

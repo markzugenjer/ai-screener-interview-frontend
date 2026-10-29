@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Languages, Plus, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,11 +8,12 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Alert, Button, Field, Input, Select, Textarea } from "@/components/ui";
 import { useI18n } from "@/i18n/client";
+import { localeNames, type Locale } from "@/i18n/config";
 import { fmt } from "@/i18n/format";
 import { ClientApiError, api } from "@/lib/api-client";
 import { errorMessage } from "@/lib/errors";
 import { cn } from "@/lib/format";
-import type { Job, Question, Weights } from "@/lib/types";
+import type { Job, JobText, Question, Weights } from "@/lib/types";
 
 type Q = Omit<Question, "jobId" | "sort"> & { key: string };
 
@@ -21,7 +22,51 @@ const lines = (s: string) => s.split("\n").map((l) => l.trim()).filter(Boolean);
 let counter = 0;
 const newKey = () => `q${++counter}`;
 
-export function JobForm({ job, questions, canDelete }: { job?: Job; questions?: Question[]; canDelete?: boolean }) {
+// Public job text per language, as edited in the form (requirements as one-per-line text).
+type FormText = Omit<JobText, "requirements"> & { requirements: string };
+const LANGS: Locale[] = ["id", "en"];
+const otherOf = (l: Locale): Locale => (l === "id" ? "en" : "id");
+const blankText: FormText = { title: "", division: "", category: "", location: "", employmentType: "", description: "", requirements: "" };
+const toForm = (t?: Partial<JobText>): FormText => ({
+  title: t?.title ?? "",
+  division: t?.division ?? "",
+  category: t?.category ?? "",
+  location: t?.location ?? "",
+  employmentType: t?.employmentType ?? "",
+  description: t?.description ?? "",
+  requirements: (t?.requirements ?? []).join("\n"),
+});
+const fromForm = (t: FormText): JobText => ({ ...t, requirements: lines(t.requirements) });
+const hasText = (t: FormText) => Boolean((t.title + t.description + t.requirements).trim());
+
+/** The job's text in both languages: the original plus its translation (if any). */
+function initialTexts(job?: Job): { source: Locale; texts: Record<Locale, FormText> } {
+  if (!job) {
+    return {
+      source: "id",
+      texts: { id: { ...blankText, division: "Engineering", category: "Technical", employmentType: "Full-time" }, en: blankText },
+    };
+  }
+  const source = job.sourceLang ?? "id";
+  const other = otherOf(source);
+  return {
+    source,
+    texts: { [source]: toForm(job), [other]: toForm(job.translations?.[other]) } as Record<Locale, FormText>,
+  };
+}
+
+export function JobForm({
+  job,
+  questions,
+  canDelete,
+  createdNotice,
+}: {
+  job?: Job;
+  questions?: Question[];
+  canDelete?: boolean;
+  /** After creating a job: "translated" or "missing", from the URL. */
+  createdNotice?: string;
+}) {
   const { t } = useI18n();
   const f = t.jobForm;
   const router = useRouter();
@@ -32,6 +77,38 @@ export function JobForm({ job, questions, canDelete }: { job?: Job; questions?: 
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [{ source, texts }, setDoc] = useState(() => initialTexts(job));
+  const [lang, setLang] = useState<Locale>(source);
+  const [translating, setTranslating] = useState(false);
+  const [notice, setNotice] = useState(() => {
+    if (!job || !createdNotice) return "";
+    const otherName = localeNames[otherOf(job.sourceLang ?? "id")];
+    return fmt(createdNotice === "translated" ? f.autoTranslated : f.missingTranslation, { lang: otherName });
+  });
+  const text = texts[lang];
+  const setField = (key: keyof FormText, value: string) =>
+    setDoc((d) => ({ ...d, texts: { ...d.texts, [lang]: { ...d.texts[lang], [key]: value } } }));
+
+  async function translateNow() {
+    const to = otherOf(lang);
+    setNotice("");
+    setFormError("");
+    if (!hasText(text)) {
+      setFormError(f.translateEmpty);
+      return;
+    }
+    setTranslating(true);
+    try {
+      const res = await api<{ text: JobText }>("POST", "/admin/jobs/translate", { from: lang, to, text: fromForm(text) });
+      setDoc((d) => ({ ...d, texts: { ...d.texts, [to]: toForm(res.text) } }));
+      setLang(to);
+      setNotice(fmt(f.translateFilled, { from: localeNames[lang] }));
+    } catch (err) {
+      setFormError(errorMessage(err, t, f.saveError));
+    } finally {
+      setTranslating(false);
+    }
+  }
   const total = Object.values(weights).reduce((a, b) => a + (Number(b) || 0), 0);
 
   const weightLabels: { key: keyof Weights; label: string }[] = [
@@ -57,15 +134,17 @@ export function JobForm({ job, questions, canDelete }: { job?: Job; questions?: 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    // The original is the language the job was written in; if only the other tab
+    // was filled in, that one becomes the original.
+    let src = source;
+    if (!hasText(texts[src]) && hasText(texts[otherOf(src)])) src = otherOf(src);
+    const base = fromForm(texts[src]);
+    const other = otherOf(src);
     const body = {
-      title: String(fd.get("title") ?? ""),
-      division: String(fd.get("division") ?? ""),
-      category: String(fd.get("category") ?? ""),
+      ...base,
+      sourceLang: src,
+      translations: hasText(texts[other]) ? { [other]: fromForm(texts[other]) } : {},
       level: String(fd.get("level") ?? "junior"),
-      location: String(fd.get("location") ?? ""),
-      employmentType: String(fd.get("employmentType") ?? ""),
-      description: String(fd.get("description") ?? ""),
-      requirements: lines(String(fd.get("requirements") ?? "")),
       skills: String(fd.get("skills") ?? "")
         .split(",")
         .map((s) => s.trim().toLowerCase())
@@ -91,10 +170,15 @@ export function JobForm({ job, questions, canDelete }: { job?: Job; questions?: 
     setErrors({});
     setFormError("");
     setSaved(false);
+    setNotice("");
     try {
-      const res = await api<{ job: Job }>(job ? "PUT" : "POST", job ? `/admin/jobs/${job.id}` : "/admin/jobs", body);
+      const res = await api<{ job: Job; translated?: string[] }>(job ? "PUT" : "POST", job ? `/admin/jobs/${job.id}` : "/admin/jobs", body);
       setSaved(true);
-      if (!job) router.replace(`/admin/jobs/${res.job.id}`);
+      setDoc(initialTexts(res.job));
+      const otherName = localeNames[otherOf(res.job.sourceLang ?? src)];
+      const kind = res.translated?.length ? "translated" : res.job.translations?.[otherOf(res.job.sourceLang ?? src)] ? "" : "missing";
+      if (kind) setNotice(fmt(kind === "translated" ? f.autoTranslated : f.missingTranslation, { lang: otherName }));
+      if (!job) router.replace(`/admin/jobs/${res.job.id}${kind ? `?created=${kind}` : ""}`);
       router.refresh();
     } catch (err) {
       if (err instanceof ClientApiError && Object.keys(err.fields).length) {
@@ -109,16 +193,56 @@ export function JobForm({ job, questions, canDelete }: { job?: Job; questions?: 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-8">
       <section className="space-y-5 rounded-card border border-line bg-paper p-6">
-        <h2 className="text-lg font-bold">{f.role}</h2>
-        <Field label={f.title} htmlFor="title" error={errors.title}>
-          <Input id="title" name="title" defaultValue={job?.title} required placeholder={f.titlePlaceholder} invalid={!!errors.title} />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-lg font-bold">{f.role}</h2>
+          <div className="flex flex-wrap items-center gap-2">
+            <div role="tablist" aria-label={f.textLanguage} className="inline-flex rounded-full bg-mist p-1">
+              {LANGS.map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  role="tab"
+                  aria-selected={lang === l}
+                  onClick={() => setLang(l)}
+                  className={cn(
+                    "inline-flex h-8 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold",
+                    lang === l ? "bg-paper text-ink shadow-sm" : "text-ink-soft hover:text-ink",
+                  )}
+                >
+                  {localeNames[l]}
+                  {l === source ? (
+                    <span className="rounded-full bg-sage-100 px-1.5 py-0.5 text-[0.6875rem] font-bold text-sage-700">{f.original}</span>
+                  ) : (
+                    !hasText(texts[l]) && <span className="size-1.5 rounded-full bg-blush-400" title={f.notTranslated} aria-label={f.notTranslated} />
+                  )}
+                </button>
+              ))}
+            </div>
+            <Button type="button" variant="secondary" size="sm" loading={translating} onClick={translateNow}>
+              {!translating && <Languages className="size-4" aria-hidden />}
+              {translating ? f.translating : fmt(f.translateTo, { lang: localeNames[otherOf(lang)] })}
+            </Button>
+          </div>
+        </div>
+        <p className="-mt-2 text-sm text-ink-soft">{f.langHint}</p>
+        {notice && <Alert tone="sage">{notice}</Alert>}
+        <Field label={f.title} htmlFor="title" error={lang === source ? errors.title : undefined}>
+          <Input
+            id="title"
+            lang={lang}
+            value={text.title}
+            onChange={(e) => setField("title", e.target.value)}
+            required={lang === source}
+            placeholder={f.titlePlaceholder}
+            invalid={lang === source && !!errors.title}
+          />
         </Field>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <Field label={f.division} htmlFor="division" error={errors.division}>
-            <Input id="division" name="division" defaultValue={job?.division ?? "Engineering"} />
+            <Input id="division" lang={lang} value={text.division} onChange={(e) => setField("division", e.target.value)} />
           </Field>
           <Field label={f.category} htmlFor="category" hint={f.categoryHint}>
-            <Input id="category" name="category" defaultValue={job?.category ?? "Technical"} />
+            <Input id="category" lang={lang} value={text.category} onChange={(e) => setField("category", e.target.value)} />
           </Field>
           <Field label={f.level} htmlFor="level" error={errors.level}>
             <Select id="level" name="level" defaultValue={job?.level ?? "junior"}>
@@ -137,21 +261,21 @@ export function JobForm({ job, questions, canDelete }: { job?: Job; questions?: 
         </div>
         <div className="grid gap-5 sm:grid-cols-3">
           <Field label={f.location} htmlFor="location">
-            <Input id="location" name="location" defaultValue={job?.location} placeholder={f.locationPlaceholder} />
+            <Input id="location" lang={lang} value={text.location} onChange={(e) => setField("location", e.target.value)} placeholder={f.locationPlaceholder} />
           </Field>
           <Field label={f.employmentType} htmlFor="employmentType">
-            <Input id="employmentType" name="employmentType" defaultValue={job?.employmentType ?? "Full-time"} />
+            <Input id="employmentType" lang={lang} value={text.employmentType} onChange={(e) => setField("employmentType", e.target.value)} />
           </Field>
           <Field label={f.length} htmlFor="durationMinutes" error={errors.durationMinutes}>
             <Input id="durationMinutes" name="durationMinutes" type="number" min={5} max={60} defaultValue={job?.durationMinutes ?? 20} />
           </Field>
         </div>
         <Field label={f.description} htmlFor="description" error={errors.description}>
-          <Textarea id="description" name="description" defaultValue={job?.description} rows={4} />
+          <Textarea id="description" lang={lang} value={text.description} onChange={(e) => setField("description", e.target.value)} rows={4} />
         </Field>
         <div className="grid gap-5 md:grid-cols-2">
-          <Field label={f.requirements} htmlFor="requirements" hint={f.oneperline} error={errors.requirements}>
-            <Textarea id="requirements" name="requirements" defaultValue={job?.requirements.join("\n")} rows={5} />
+          <Field label={f.requirements} htmlFor="requirements" hint={f.oneperline} error={errors.requirements ?? errors[`translations.${lang}`]}>
+            <Textarea id="requirements" lang={lang} value={text.requirements} onChange={(e) => setField("requirements", e.target.value)} rows={5} />
           </Field>
           <Field label={f.skills} htmlFor="skills" hint={f.skillsHint} error={errors.skills}>
             <Input id="skills" name="skills" defaultValue={job?.skills.join(", ")} />
