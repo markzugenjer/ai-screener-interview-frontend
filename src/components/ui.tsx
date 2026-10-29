@@ -121,9 +121,7 @@ export function Textarea({ invalid, className, ...props }: ComponentProps<"texta
   );
 }
 
-export function Select({ className, ...props }: ComponentProps<"select">) {
-  return <select className={cn(fieldBase, "h-11 border-line pr-8", className)} {...props} />;
-}
+export { Select } from "./select";
 
 type Tone = "neutral" | "sage" | "blush" | "amber" | "danger";
 const tones: Record<Tone, string> = {
