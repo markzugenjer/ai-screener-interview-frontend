@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { PageTitle, RecommendationBadge, ScoreBar } from "@/components/admin-bits";
+import { OpenAccessBanner, PageTitle, RecommendationBadge, ScoreBar } from "@/components/admin-bits";
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { EmptyState, LinkButton } from "@/components/ui";
 import { fmt, formatDate } from "@/i18n/format";
 import { getI18n, getLocale } from "@/i18n/server";
-import { apiServer } from "@/lib/api-server";
+import { apiServer, currentUser } from "@/lib/api-server";
 import type { ResultRow, Stats } from "@/lib/types";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,15 +16,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AdminOverview() {
   const locale = await getLocale();
-  const [{ t }, { stats }, { results }] = await Promise.all([
+  const [{ t }, { stats, openRecruiterAccess }, { results }, me] = await Promise.all([
     getI18n(),
-    apiServer<{ stats: Stats }>("/api/v1/admin/stats"),
+    apiServer<{ stats: Stats; openRecruiterAccess?: boolean }>("/api/v1/admin/stats"),
     apiServer<{ results: ResultRow[] }>(`/api/v1/admin/results?status=scored&decision=none&sort=-overall&pageSize=6&lang=${locale}`),
+    currentUser(),
   ]);
 
   return (
     <>
       <PageTitle title={t.admin.overview}>{t.admin.overviewLead}</PageTitle>
+      {openRecruiterAccess && <OpenAccessBanner t={t} showTeamLink={me?.role === "admin"} />}
 
       <Stagger className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StaggerItem className="rounded-card bg-sage-100 p-5 sm:col-span-2 xl:col-span-1">

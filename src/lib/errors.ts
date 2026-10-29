@@ -26,6 +26,10 @@ export function errorMessage(err: unknown, t: Dictionary, fallback = t.errors.ge
       return t.errors.interviewEnded;
     case "no_questions":
       return t.errors.notReady;
+    case "own_role":
+      return t.errors.ownRole;
+    case "last_admin":
+      return t.errors.lastAdmin;
     case "reset_not_allowed":
       return /already used/i.test(err.message) ? t.errors.resetUsed : t.errors.resetLate;
   }

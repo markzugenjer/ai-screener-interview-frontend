@@ -15,9 +15,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <>
       <SiteHeader user={user} />
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[13rem_1fr] lg:gap-10">
-        <aside className="lg:sticky lg:top-24 lg:self-start">
-          <AdminNav />
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-10">
+        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
+          <AdminNav isAdmin={user.role === "admin"} />
         </aside>
         <div className="isolate min-w-0">{children}</div>
       </div>

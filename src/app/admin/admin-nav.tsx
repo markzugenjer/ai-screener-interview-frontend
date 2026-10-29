@@ -1,6 +1,6 @@
 "use client";
 
-import { BriefcaseBusiness, LayoutGrid, Users } from "lucide-react";
+import { BriefcaseBusiness, LayoutGrid, ShieldCheck, Users } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,13 +8,14 @@ import { usePathname } from "next/navigation";
 import { useI18n } from "@/i18n/client";
 import { cn } from "@/lib/format";
 
-export function AdminNav() {
+export function AdminNav({ isAdmin = false }: { isAdmin?: boolean }) {
   const { t } = useI18n();
   const path = usePathname();
   const items = [
     { href: "/admin", label: t.admin.overview, icon: LayoutGrid, exact: true },
     { href: "/admin/results", label: t.admin.candidates, icon: Users },
     { href: "/admin/jobs", label: t.admin.jobs, icon: BriefcaseBusiness },
+    ...(isAdmin ? [{ href: "/admin/team", label: t.admin.team, icon: ShieldCheck }] : []),
   ];
   return (
     <nav aria-label={t.admin.nav} className="isolate flex gap-1 overflow-x-auto lg:flex-col">

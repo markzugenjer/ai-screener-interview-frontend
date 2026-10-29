@@ -54,6 +54,12 @@ export async function requireUser(next: string): Promise<User> {
   return user;
 }
 
+export async function requireAdmin(next: string): Promise<User> {
+  const user = await requireUser(next);
+  if (user.role !== "admin") redirect("/admin");
+  return user;
+}
+
 export async function requireStaff(next: string): Promise<User> {
   const user = await requireUser(next);
   if (!user.canRecruit) redirect("/dashboard");

@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { TriangleAlert } from "lucide-react";
 import type { Dictionary } from "@/i18n/config";
 import type { Decision, InterviewStatus, Recommendation } from "@/lib/types";
 import { Reveal } from "./motion";
@@ -41,5 +43,23 @@ export function PageTitle({ title, children, action }: { title: string; children
       </div>
       {action}
     </Reveal>
+  );
+}
+
+/** Shown while OPEN_RECRUITER_ACCESS is on: everyone signed in can see candidates' data. */
+export function OpenAccessBanner({ t, showTeamLink }: { t: Dictionary; showTeamLink?: boolean }) {
+  return (
+    <div role="status" className="mb-6 flex gap-3 rounded-card border border-amber/30 bg-amber-soft p-4 text-sm">
+      <TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber" aria-hidden />
+      <div>
+        <p className="font-bold text-ink">{t.admin.openAccessTitle}</p>
+        <p className="mt-1 leading-relaxed text-ink-soft">{t.admin.openAccessBody}</p>
+        {showTeamLink && (
+          <Link href="/admin/team" className="mt-2 inline-block font-semibold text-sage-700 underline decoration-transparent underline-offset-4 hover:decoration-current">
+            {t.admin.team} →
+          </Link>
+        )}
+      </div>
+    </div>
   );
 }
