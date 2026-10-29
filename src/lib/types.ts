@@ -12,6 +12,10 @@ export interface User {
   whatsapp: string;
   resumeName: string;
   createdAt: string;
+  /** May use the recruiter area (staff role, or open access while it is on). */
+  canRecruit: boolean;
+  /** Signs in with JOBI (FDC employee single sign-on); has no password here. */
+  viaJobi: boolean;
 }
 
 export interface Weights {

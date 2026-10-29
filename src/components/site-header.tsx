@@ -10,7 +10,7 @@ import { LinkButton } from "./ui";
 
 export async function SiteHeader({ user }: { user: User | null }) {
   const { t } = await getI18n();
-  const staff = user?.role === "recruiter" || user?.role === "admin";
+  const staff = Boolean(user?.canRecruit);
   const menuLinks = [
     { href: user ? "/dashboard#jobs" : "/#jobs", label: t.nav.openRoles },
     ...(user && !staff ? [{ href: "/dashboard#interviews", label: t.nav.myInterviews }] : []),

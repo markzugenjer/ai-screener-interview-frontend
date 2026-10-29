@@ -13,10 +13,10 @@ import { errorMessage } from "@/lib/errors";
 import type { User } from "@/lib/types";
 import { safeNext } from "@/lib/validation";
 
-export function LoginForm({ next }: { next?: string }) {
+export function LoginForm({ next, initialError }: { next?: string; initialError?: string }) {
   const { t } = useI18n();
   const router = useRouter();
-  const [error, setError] = useState("");
+  const [error, setError] = useState(initialError ?? "");
   const [busy, setBusy] = useState(false);
   const [scope, animate] = useAnimate<HTMLFormElement>();
   // Shake the form on an error, without remounting it (typed values are kept).
@@ -36,8 +36,7 @@ export function LoginForm({ next }: { next?: string }) {
     setBusy(true);
     try {
       const { user } = await api<{ user: User }>("POST", "/auth/login", { email, password });
-      const staff = user.role === "recruiter" || user.role === "admin";
-      router.replace(safeNext(next, staff ? "/admin" : "/dashboard"));
+      router.replace(safeNext(next, user.canRecruit ? "/admin" : "/dashboard"));
       router.refresh();
     } catch (err) {
       setBusy(false);
@@ -61,7 +60,7 @@ export function LoginForm({ next }: { next?: string }) {
         )}
       </AnimatePresence>
       <Field label={t.auth.email} htmlFor="email">
-        <Input id="email" name="email" type="email" autoComplete="email" required autoFocus />
+        <Input id="email" name="email" type="email" autoComplete="email" required autoFocus={!initialError} />
       </Field>
       <Field label={t.auth.password} htmlFor="password">
         <PasswordInput id="password" name="password" autoComplete="current-password" required />
